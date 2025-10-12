@@ -1,0 +1,738 @@
+/* SnooShelf - Enhanced Visual Feedback & Micro-interactions */
+
+/* ============================================================================
+   CSS VARIABLES & BASE STYLES
+   ============================================================================ */
+
+:root {
+    /* Colors */
+    --primary-orange: #FF4500;
+    --primary-orange-hover: #e03e00;
+    --success-green: #28a745;
+    --error-red: #dc3545;
+    --warning-yellow: #ffc107;
+    --info-blue: #007bff;
+    --text-primary: #1a1a1b;
+    --text-secondary: #666;
+    --text-muted: #999;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #e9ecef;
+    --border-color: #ddd;
+    --border-focus: #FF4500;
+    
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    
+    /* Transitions */
+    --transition-fast: 150ms ease-in-out;
+    --transition-normal: 250ms ease-in-out;
+    --transition-slow: 350ms ease-in-out;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
+    --shadow-focus: 0 0 0 3px rgba(255, 69, 0, 0.1);
+}
+
+/* ============================================================================
+   BASE STYLES & RESET
+   ============================================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+}
+
+/* ============================================================================
+   ANIMATION KEYFRAMES
+   ============================================================================ */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInStagger {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-5px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(5px);
+    }
+}
+
+@keyframes checkmark {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes countUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes progressFill {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+/* ============================================================================
+   BUTTON ENHANCEMENTS
+   ============================================================================ */
+
+.btn {
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-normal);
+    will-change: transform, box-shadow;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn:active {
+    transform: translateY(0);
+    transition: all var(--transition-fast);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Sync Section Layout */
+.sync-section {
+    padding: var(--spacing-md);
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    margin-bottom: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.sync-stats {
+    margin-bottom: 12px;
+}
+
+.sync-section .save-count {
+    font-size: 16px;
+    margin: 0 0 4px 0;
+    color: var(--text-primary);
+}
+
+.sync-section .save-count strong {
+    font-size: 20px;
+    color: #000;
+    font-weight: 700;
+}
+
+.sync-section .last-sync {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.sync-section .last-sync span {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Sync Button */
+.sync-button {
+    width: 100%;
+    background: var(--primary-orange) !important;
+    color: white !important;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--transition-normal);
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+}
+
+.sync-button:hover {
+    background: var(--primary-orange-hover) !important;
+}
+
+.sync-button:disabled {
+    background: #ccc !important;
+    cursor: not-allowed;
+}
+
+/* Force sync button visibility by ID */
+#syncBtn {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: inline-block !important;
+    background: var(--primary-orange) !important;
+    color: white !important;
+}
+
+/* Ripple Effect */
+.btn-ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-ripple::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-ripple:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Loading State */
+.btn-loading {
+    position: relative;
+    color: transparent !important;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Success State */
+.btn-success {
+    background: var(--success-green) !important;
+    animation: checkmark 0.6s ease-out;
+}
+
+/* ============================================================================
+   LIST ITEMS & CARDS
+   ============================================================================ */
+
+.save-item {
+    transition: all var(--transition-normal);
+    will-change: transform, box-shadow, opacity;
+}
+
+.save-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.save-item:active {
+    transform: translateY(0);
+    transition: all var(--transition-fast);
+}
+
+/* Staggered Animation */
+.save-item:nth-child(1) { animation: fadeInStagger 0.4s ease-out 0.1s both; }
+.save-item:nth-child(2) { animation: fadeInStagger 0.4s ease-out 0.15s both; }
+.save-item:nth-child(3) { animation: fadeInStagger 0.4s ease-out 0.2s both; }
+.save-item:nth-child(4) { animation: fadeInStagger 0.4s ease-out 0.25s both; }
+.save-item:nth-child(5) { animation: fadeInStagger 0.4s ease-out 0.3s both; }
+.save-item:nth-child(n+6) { animation: fadeInStagger 0.4s ease-out 0.35s both; }
+
+/* ============================================================================
+   SEARCH ENHANCEMENTS
+   ============================================================================ */
+
+.search-input {
+    transition: all var(--transition-normal);
+    will-change: border-color, box-shadow;
+}
+
+.search-input:focus {
+    border-color: var(--border-focus);
+    box-shadow: var(--shadow-focus);
+    transform: translateY(-1px);
+}
+
+.search-loading {
+    position: relative;
+}
+
+.search-loading::after {
+    content: '';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    margin-top: -8px;
+    border: 2px solid var(--border-color);
+    border-top: 2px solid var(--primary-orange);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Highlight matched text */
+.search-highlight {
+    background: rgba(255, 69, 0, 0.2);
+    padding: 1px 2px;
+    border-radius: 2px;
+    font-weight: 600;
+}
+
+/* No results animation */
+.no-results {
+    animation: fadeIn var(--transition-slow) ease-out;
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--text-muted);
+}
+
+/* ============================================================================
+   SYNC & PROGRESS
+   ============================================================================ */
+
+.sync-progress {
+    width: 100%;
+    height: 4px;
+    background: var(--bg-tertiary);
+    border-radius: 2px;
+    overflow: hidden;
+    margin: var(--spacing-sm) 0;
+}
+
+.sync-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-orange), #ff6b35);
+    border-radius: 2px;
+    transition: width var(--transition-slow) ease-out;
+    animation: progressFill 2s ease-out;
+}
+
+.sync-success {
+    animation: checkmark 0.6s ease-out;
+}
+
+.sync-error {
+    animation: shake 0.6s ease-out;
+}
+
+/* ============================================================================
+   STATS ANIMATIONS
+   ============================================================================ */
+
+.stat-number {
+    animation: countUp 0.8s ease-out;
+    will-change: transform, opacity;
+}
+
+.stat-bar {
+    transition: width var(--transition-slow) ease-out;
+    will-change: width;
+}
+
+.stats-section {
+    transition: all var(--transition-normal);
+    will-change: height, opacity;
+}
+
+.stats-content {
+    max-height: 500px;
+    opacity: 1;
+    transition: all var(--transition-normal);
+    overflow: hidden;
+}
+
+.stats-section.collapsed .stats-content {
+    max-height: 0;
+    padding: 0 20px;
+    opacity: 0;
+    overflow: hidden;
+}
+
+.stats-section.expanded {
+    max-height: 500px;
+    opacity: 1;
+}
+
+/* ============================================================================
+   FOCUS STATES & ACCESSIBILITY
+   ============================================================================ */
+
+.focusable:focus {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+    box-shadow: var(--shadow-focus);
+}
+
+.focusable:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .focusable:focus {
+        outline: 3px solid;
+        outline-offset: 3px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ============================================================================
+   LOADING STATES
+   ============================================================================ */
+
+.loading-skeleton {
+    background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%);
+    background-size: 200% 100%;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn var(--transition-normal) ease-out;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--bg-tertiary);
+    border-top: 4px solid var(--primary-orange);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* ============================================================================
+   TOAST NOTIFICATIONS
+   ============================================================================ */
+
+.toast {
+    animation: slideIn var(--transition-normal) ease-out;
+    will-change: transform, opacity;
+}
+
+.toast-hide {
+    animation: fadeOut var(--transition-fast) ease-in;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.animate-fade-in {
+    animation: fadeIn var(--transition-normal) ease-out;
+}
+
+.animate-slide-in {
+    animation: slideIn var(--transition-normal) ease-out;
+}
+
+.animate-scale-in {
+    animation: scaleIn var(--transition-normal) ease-out;
+}
+
+.animate-pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-shake {
+    animation: shake 0.6s ease-out;
+}
+
+.animate-checkmark {
+    animation: checkmark 0.6s ease-out;
+}
+
+/* Performance optimizations */
+.will-change-transform {
+    will-change: transform;
+}
+
+.will-change-opacity {
+    will-change: opacity;
+}
+
+.will-change-auto {
+    will-change: auto;
+}
+
+/* ============================================================================
+   VIRTUAL SCROLLING
+   ============================================================================ */
+
+.saves-list {
+    overflow-y: auto;
+    height: 400px;
+    position: relative;
+}
+
+.saves-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.saves-list::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+}
+
+.saves-list::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+.saves-list::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* Virtual scrolling viewport */
+.virtual-viewport {
+    position: relative;
+    width: 100%;
+}
+
+/* Search loading state */
+.search-loading {
+    position: relative;
+}
+
+.search-loading::after {
+    content: '';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    margin-top: -8px;
+    border: 2px solid var(--border-color);
+    border-top: 2px solid var(--primary-orange);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Performance optimizations */
+.save-item {
+    will-change: transform, opacity;
+    contain: layout style paint;
+}
+
+/* Pagination controls */
+.pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    margin-top: var(--spacing-sm);
+}
+
+.pagination-btn {
+    background: var(--primary-orange);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: var(--primary-orange-hover);
+    transform: translateY(-1px);
+}
+
+.pagination-btn:disabled {
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.pagination-info {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 400px) {
+    .btn {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+    
+    .save-item {
+        padding: var(--spacing-sm);
+    }
+}
+
+/* ============================================================================
+   DARK MODE SUPPORT (Future)
+   ============================================================================ */
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-primary: #ffffff;
+        --text-secondary: #cccccc;
+        --text-muted: #999999;
+        --bg-primary: #1a1a1b;
+        --bg-secondary: #2d2d30;
+        --bg-tertiary: #3d3d40;
+        --border-color: #4d4d50;
+    }
+}

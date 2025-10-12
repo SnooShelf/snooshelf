@@ -1,0 +1,930 @@
+# SnooShelf - Cursor AI Rules & Context
+
+## Project Overview
+
+You are helping build **SnooShelf**, a privacy-first Chrome extension that solves Reddit's 1,000-save limit by storing unlimited saves locally in the browser with instant search and organization.
+
+**Core Philosophy:** Local-first, privacy-focused, minimal infrastructure, maximum user control.
+
+---
+
+## Project Context
+
+### What We're Building
+- **Product:** Chrome extension (Manifest V3)
+- **Purpose:** Unlimited Reddit saves with local storage, instant search, and organization
+- **Target Users:** Reddit power users who hit the 1,000-save limit
+- **Tech Approach:** Store everything in IndexedDB (browser), search with Lunr.js (client-side), minimal backend (OAuth only)
+
+### Business Model
+- **Free Tier:** 1,000 saves, basic search, CSV export
+- **Pro Tier:** $4.99/month - Unlimited saves, advanced search, tags/folders, all exports, cloud backup
+- **Revenue Goal:** $800 MRR by Month 3
+
+### Key Differentiators
+1. **98% lower costs** than competitors (no cloud database)
+2. **Instant offline search** (all local, no API calls)
+3. **Privacy-first** (data never leaves user's device)
+4. **50% cheaper** than main competitor ($4.99 vs $10)
+
+---
+
+## Technical Stack & Architecture
+
+### Frontend
+- **Language:** Vanilla JavaScript (ES6+), HTML5, CSS3
+- **Framework:** None (keep bundle size minimal)
+- **Chrome API:** Manifest V3 (latest standard)
+- **UI Library:** None (custom components, Tailwind for utility classes acceptable)
+
+### Storage & Data
+- **Primary Storage:** IndexedDB (browser-native, 10GB+ capacity)
+- **Search Engine:** Lunr.js v2.3.9 (client-side full-text search)
+- **Backup Storage:** Chrome storage API (settings, license key)
+- **No Cloud Database:** Data stays 100% local (except optional user-controlled exports)
+
+### Backend (Minimal)
+- **Authentication:** Reddit OAuth 2.0
+- **Server:** AWS Lambda (Node.js) - ONLY for OAuth token exchange
+- **Payment:** Stripe Checkout + webhooks
+- **Cost Target:** <$20/month total infrastructure
+
+### APIs & Integrations
+- **Reddit API:** `/api/v1/me/saved` (fetch saves)
+- **Stripe API:** Subscription management
+- **Google Drive API:** Optional cloud backup (user-initiated)
+- **Dropbox API:** Optional cloud backup alternative
+
+---
+
+## Code Standards & Patterns
+
+### JavaScript Style
+```javascript
+// Use modern ES6+ syntax
+const fetchSaves = async () => {
+  try {
+    const response = await fetch(API_URL);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch saves:', error);
+    throw error;
+  }
+};
+
+// Prefer async/await over .then() chains
+// Use destructuring for cleaner code
+const { title, url, subreddit } = post;
+
+// Arrow functions for callbacks
+saves.map(save => save.title);
+```
+
+### Naming Conventions
+- **Variables/Functions:** camelCase (`fetchSaves`, `userSettings`)
+- **Constants:** UPPER_SNAKE_CASE (`MAX_FREE_SAVES`, `API_BASE_URL`)
+- **Classes:** PascalCase (`SearchEngine`, `StorageManager`)
+- **Files:** kebab-case (`search-engine.js`, `storage-manager.js`)
+- **Folders:** kebab-case (`components/`, `utils/`, `background/`)
+
+### File Organization
+```
+snooshelf/
+├── manifest.json              # Chrome extension config
+├── src/
+│   ├── popup/
+│   │   ├── popup.html        # Main extension popup
+│   │   ├── popup.js          # Popup logic
+│   │   └── popup.css         # Popup styles
+│   ├── background/
+│   │   └── service-worker.js # Background tasks, OAuth
+│   ├── settings/
+│   │   ├── settings.html     # Settings page
+│   │   ├── settings.js
+│   │   └── settings.css
+│   ├── lib/
+│   │   ├── storage.js        # IndexedDB wrapper
+│   │   ├── search.js         # Lunr.js integration
+│   │   ├── reddit-api.js     # Reddit API client
+│   │   └── stripe.js         # Payment logic
+│   ├── utils/
+│   │   ├── helpers.js        # Utility functions
+│   │   └── constants.js      # App constants
+│   └── assets/
+│       ├── icons/            # Extension icons (16, 48, 128px)
+│       └── images/           # UI assets
+└── lambda/
+    └── oauth-handler.js      # AWS Lambda OAuth function
+```
+
+### Error Handling Pattern
+```javascript
+// Always handle errors gracefully
+async function syncSaves() {
+  try {
+    const saves = await RedditAPI.fetchSaves();
+    await Storage.saveBatch(saves);
+    UI.showSuccess(`${saves.length} saves synced`);
+  } catch (error) {
+    // Log for debugging
+    console.error('Sync failed:', error);
+    
+    // User-friendly error message
+    if (error.message.includes('rate limit')) {
+      UI.showError('Reddit API limit reached. Try again in 1 hour.');
+    } else if (!navigator.onLine) {
+      UI.showError('No internet connection. Will sync when online.');
+    } else {
+      UI.showError('Sync failed. Please try again.');
+    }
+    
+    // Track error (without PII)
+    Analytics.trackError('sync_failed', error.message);
+  }
+}
+```
+
+### Comments & Documentation
+```javascript
+// Use JSDoc for functions
+/**
+ * Searches saves using Lunr.js full-text search
+ * @param {string} query - Search query from user
+ * @param {Object} filters - Optional filters (date, subreddit, tags)
+ * @returns {Array} Array of matching save objects
+ */
+function searchSaves(query, filters = {}) {
+  // Implementation
+}
+
+// Inline comments for complex logic only
+// Good: Explain WHY, not WHAT
+// Bad: "Loop through saves" (obvious)
+// Good: "Filter by date first to reduce Lunr.js index size"
+```
+
+---
+
+## Chrome Extension Specific Rules
+
+### Manifest V3 Requirements
+```json
+{
+  "manifest_version": 3,
+  "name": "SnooShelf",
+  "version": "1.0.0",
+  "description": "Unlimited Reddit saves with instant search and organization",
+  "permissions": [
+    "storage",           // For settings & license
+    "unlimitedStorage",  // For IndexedDB (no quota)
+    "identity"           // For OAuth (if using chrome.identity)
+  ],
+  "host_permissions": [
+    "https://www.reddit.com/*",
+    "https://oauth.reddit.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background/service-worker.js"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "src/assets/icons/icon16.png",
+      "48": "src/assets/icons/icon48.png",
+      "128": "src/assets/icons/icon128.png"
+    }
+  }
+}
+```
+
+### Service Worker Rules (Manifest V3)
+```javascript
+// Service workers have NO access to DOM or window
+// Use message passing for popup <-> background communication
+
+// Background (service-worker.js)
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'fetchSaves') {
+    fetchSavesFromReddit()
+      .then(saves => sendResponse({ success: true, saves }))
+      .catch(error => sendResponse({ success: false, error: error.message }));
+    return true; // Required for async sendResponse
+  }
+});
+
+// Popup (popup.js)
+chrome.runtime.sendMessage(
+  { action: 'fetchSaves' },
+  response => {
+    if (response.success) {
+      displaySaves(response.saves);
+    }
+  }
+);
+```
+
+### Storage Best Practices
+```javascript
+// Use chrome.storage.local for settings (5MB limit)
+await chrome.storage.local.set({ theme: 'dark', autoSync: true });
+const { theme } = await chrome.storage.local.get('theme');
+
+// Use IndexedDB for large data (saves, search index)
+// NEVER use chrome.storage.sync for saves (100KB limit per item)
+
+// IndexedDB wrapper example
+const db = await openDatabase('snooshelf', 1, {
+  saves: 'id, subreddit, date', // Object store with indexes
+  tags: 'id, name',
+  folders: 'id, name'
+});
+```
+
+---
+
+## Feature-Specific Guidelines
+
+### 1. Reddit API Integration
+
+**Authentication Flow:**
+```javascript
+// Use Reddit OAuth 2.0 (NOT implicit flow)
+const REDDIT_CLIENT_ID = 'your_client_id';
+const REDIRECT_URI = 'https://your-lambda.amazonaws.com/callback';
+
+// Step 1: Redirect to Reddit
+const authURL = `https://www.reddit.com/api/v1/authorize?client_id=${REDDIT_CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}&scope=history`;
+
+// Step 2: Exchange code for token (in Lambda, NOT in extension)
+// Step 3: Store access/refresh tokens encrypted in chrome.storage
+```
+
+**API Calls:**
+```javascript
+// Minimal API usage to avoid rate limits (60 requests/minute)
+const fetchSaves = async (after = null) => {
+  const url = `https://oauth.reddit.com/user/me/saved?limit=100${after ? `&after=${after}` : ''}`;
+  const response = await fetch(url, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'User-Agent': 'SnooShelf/1.0'
+    }
+  });
+  return response.json();
+};
+
+// Pagination: Fetch 100 at a time, use 'after' cursor
+// Cache: Don't re-fetch saves already in IndexedDB (check by ID)
+```
+
+**Error Handling:**
+```javascript
+// Handle Reddit-specific errors
+if (response.status === 429) {
+  // Rate limited
+  const retryAfter = response.headers.get('Retry-After');
+  throw new Error(`Rate limited. Retry in ${retryAfter} seconds.`);
+}
+
+if (response.status === 401) {
+  // Token expired, refresh it
+  await refreshAccessToken();
+  return fetchSaves(after); // Retry
+}
+```
+
+### 2. IndexedDB Storage
+
+**Database Schema:**
+```javascript
+// Define object stores and indexes
+const DB_NAME = 'snooshelf';
+const DB_VERSION = 1;
+
+const schema = {
+  saves: {
+    keyPath: 'id', // Reddit post ID (e.g., 't3_abc123')
+    indexes: [
+      { name: 'subreddit', keyPath: 'subreddit', unique: false },
+      { name: 'date', keyPath: 'savedAt', unique: false },
+      { name: 'tags', keyPath: 'tags', multiEntry: true } // For tag filtering
+    ]
+  },
+  tags: {
+    keyPath: 'id',
+    indexes: [{ name: 'name', keyPath: 'name', unique: true }]
+  },
+  folders: {
+    keyPath: 'id',
+    indexes: [{ name: 'name', keyPath: 'name', unique: true }]
+  },
+  settings: {
+    keyPath: 'key' // For key-value settings
+  }
+};
+```
+
+**CRUD Operations:**
+```javascript
+// Create/Update
+await db.put('saves', {
+  id: 't3_abc123',
+  title: 'Post Title',
+  url: 'https://reddit.com/...',
+  content: 'Post content...',
+  subreddit: 'programming',
+  author: 'username',
+  savedAt: Date.now(),
+  tags: ['tutorial', 'javascript'],
+  folder: 'coding-resources'
+});
+
+// Read
+const save = await db.get('saves', 't3_abc123');
+
+// Query by index
+const programmingSaves = await db.getAllFromIndex('saves', 'subreddit', 'programming');
+
+// Delete
+await db.delete('saves', 't3_abc123');
+```
+
+### 3. Search Implementation (Lunr.js)
+
+**Index Creation:**
+```javascript
+import lunr from 'lunr';
+
+// Build search index from saves
+const idx = lunr(function () {
+  this.ref('id');
+  this.field('title', { boost: 10 }); // Title matches rank higher
+  this.field('content', { boost: 5 });
+  this.field('subreddit', { boost: 3 });
+  this.field('author');
+
+  saves.forEach(save => this.add(save));
+});
+
+// Store serialized index in IndexedDB for persistence
+const serializedIndex = JSON.stringify(idx);
+await db.put('settings', { key: 'searchIndex', value: serializedIndex });
+```
+
+**Search Query:**
+```javascript
+// Load index from storage
+const { value: serializedIndex } = await db.get('settings', 'searchIndex');
+const idx = lunr.Index.load(JSON.parse(serializedIndex));
+
+// Search
+const results = idx.search(query);
+// Returns: [{ ref: 't3_abc123', score: 2.5 }, ...]
+
+// Fetch full save objects
+const saves = await Promise.all(
+  results.map(r => db.get('saves', r.ref))
+);
+```
+
+**Performance:**
+- Re-index only when saves added/removed (not on every search)
+- For <1,000 saves: Re-index immediately
+- For >1,000 saves: Debounce re-indexing (batch updates)
+- Target: <100ms search latency for 10,000 saves
+
+### 4. UI Components
+
+**Popup Layout (popup.html):**
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header>
+      <img src="../assets/icons/icon48.png" alt="SnooShelf">
+      <input type="text" id="search" placeholder="Search saves...">
+      <button id="sync">↻</button>
+    </header>
+
+    <!-- Sidebar (Pro only) -->
+    <aside id="sidebar">
+      <div class="folder" data-folder="all">All Saves (1,247)</div>
+      <div class="folder" data-folder="unorganized">Unorganized (89)</div>
+      <hr>
+      <div class="folder" data-folder="work">💼 Work Ideas (23)</div>
+      <div class="folder" data-folder="recipes">🍳 Recipes (45)</div>
+    </aside>
+
+    <!-- Main content -->
+    <main id="saves-list">
+      <!-- Save cards rendered here -->
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <button id="settings">⚙️</button>
+      <button id="upgrade" class="pro-cta">Upgrade to Pro</button>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
+```
+
+**Save Card Component (JavaScript):**
+```javascript
+function createSaveCard(save) {
+  const card = document.createElement('div');
+  card.className = 'save-card';
+  card.innerHTML = `
+    <div class="save-header">
+      <h3 class="save-title">${escapeHtml(save.title)}</h3>
+      <div class="save-meta">
+        <span class="subreddit">r/${save.subreddit}</span>
+        <span class="date">${formatDate(save.savedAt)}</span>
+      </div>
+    </div>
+    ${save.tags.length ? `
+      <div class="tags">
+        ${save.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+      </div>
+    ` : ''}
+    <div class="save-actions">
+      <button class="btn-icon" data-action="open" title="Open post">🔗</button>
+      <button class="btn-icon" data-action="tag" title="Add tag">🏷️</button>
+      <button class="btn-icon" data-action="delete" title="Delete">🗑️</button>
+    </div>
+  `;
+
+  // Event listeners
+  card.querySelector('[data-action="open"]').onclick = () => {
+    chrome.tabs.create({ url: save.url });
+  };
+
+  return card;
+}
+
+// Always escape user content to prevent XSS
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+```
+
+**CSS Styling:**
+```css
+/* Use CSS variables for theming */
+:root {
+  --primary-color: #FF4500; /* Reddit orange */
+  --bg-color: #FFFFFF;
+  --text-color: #1A1A1B;
+  --border-color: #EDEFF1;
+}
+
+.save-card {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.save-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Responsive: popup is 400px wide, optimize for that */
+```
+
+### 5. Payment Integration (Stripe)
+
+**License Validation:**
+```javascript
+// Check license on startup and every 24 hours
+async function validateLicense() {
+  const { licenseKey } = await chrome.storage.local.get('licenseKey');
+  
+  if (!licenseKey) {
+    return { valid: false, tier: 'free' };
+  }
+
+  try {
+    const response = await fetch('https://api.snooshelf.com/validate-license', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ licenseKey })
+    });
+    
+    const { valid, tier, expiresAt } = await response.json();
+    
+    // Cache result to reduce API calls
+    await chrome.storage.local.set({ 
+      proStatus: { valid, tier, expiresAt, lastChecked: Date.now() }
+    });
+    
+    return { valid, tier };
+  } catch (error) {
+    // Offline grace period: Allow 7 days before downgrade
+    const { proStatus } = await chrome.storage.local.get('proStatus');
+    if (proStatus && Date.now() - proStatus.lastChecked < 7 * 24 * 60 * 60 * 1000) {
+      return { valid: proStatus.valid, tier: proStatus.tier };
+    }
+    return { valid: false, tier: 'free' };
+  }
+}
+
+// Enforce limits based on tier
+async function canAddSave() {
+  const { tier } = await validateLicense();
+  if (tier === 'pro') return true;
+
+  const saveCount = await db.count('saves');
+  if (saveCount >= 1000) {
+    UI.showUpgradeModal('You\'ve reached the 1,000 save limit. Upgrade to Pro for unlimited saves!');
+    return false;
+  }
+  return true;
+}
+```
+
+**Upgrade Flow:**
+```javascript
+// Redirect to Stripe Checkout
+async function upgradeToPro() {
+  const checkoutURL = await createStripeCheckout();
+  chrome.tabs.create({ url: checkoutURL });
+}
+
+// Backend creates checkout session (Lambda)
+async function createStripeCheckout() {
+  const response = await fetch('https://api.snooshelf.com/create-checkout', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ 
+      priceId: 'price_pro_monthly_499', // Stripe price ID
+      successUrl: 'https://snooshelf.com/success',
+      cancelUrl: 'https://snooshelf.com/cancel'
+    })
+  });
+  const { url } = await response.json();
+  return url;
+}
+```
+
+---
+
+## Performance Optimization
+
+### Bundle Size
+- **Target:** <200KB total extension size
+- **Techniques:**
+  - No heavy frameworks (React, Vue)
+  - Tree-shake libraries (import only what's needed)
+  - Minify in production (Terser for JS, cssnano for CSS)
+  - Compress images (icons <10KB each)
+
+### Load Time
+- **Target:** Extension popup opens in <500ms
+- **Techniques:**
+  - Lazy load search index (only when user searches)
+  - Virtualize long lists (render only visible saves)
+  - Debounce search input (wait 300ms after typing stops)
+
+### Memory Usage
+- **Target:** <100MB RAM for 10,000 saves
+- **Techniques:**
+  - Don't load all saves into memory
+  - Use IndexedDB cursors for pagination
+  - Clear unused Lunr.js indexes from memory
+
+### IndexedDB Optimization
+```javascript
+// Good: Query with index
+const saves = await db.getAllFromIndex('saves', 'subreddit', 'programming');
+
+// Bad: Load all and filter in JS (slow for 10k+ saves)
+const allSaves = await db.getAll('saves');
+const filtered = allSaves.filter(s => s.subreddit === 'programming');
+
+// Good: Paginate with cursors
+const cursor = await db.transaction('saves').store.openCursor();
+let count = 0;
+while (cursor && count < 50) {
+  displaySave(cursor.value);
+  cursor.continue();
+  count++;
+}
+```
+
+---
+
+## Privacy & Security Rules
+
+### Data Handling
+- **NEVER send save content to servers** (only metadata like count for analytics)
+- **NEVER log user queries** (search happens locally)
+- **NEVER store Reddit password** (use OAuth only)
+- **Encrypt sensitive data** in chrome.storage (use crypto.subtle for tokens)
+
+### Content Security Policy
+```json
+// In manifest.json
+"content_security_policy": {
+  "extension_pages": "script-src 'self'; object-src 'self'"
+}
+// No inline scripts, no eval(), no external scripts
+```
+
+### API Security
+```javascript
+// Rate limiting (client-side)
+const rateLimiter = {
+  lastCall: 0,
+  minInterval: 1000, // 1 second between calls
+  
+  async call(fn) {
+    const now = Date.now();
+    if (now - this.lastCall < this.minInterval) {
+      throw new Error('Rate limit: Please wait before retrying');
+    }
+    this.lastCall = now;
+    return fn();
+  }
+};
+
+// Use HTTPS only
+const API_BASE = 'https://oauth.reddit.com'; // Never http://
+```
+
+---
+
+## Testing & Quality Assurance
+
+### Manual Testing Checklist
+- [ ] Install extension fresh (no previous data)
+- [ ] OAuth flow works (Reddit login)
+- [ ] Sync 100 saves successfully
+- [ ] Search returns correct results
+- [ ] Add/remove tags works
+- [ ] Export CSV downloads
+- [ ] Payment flow completes (test mode)
+- [ ] Offline mode works (no internet)
+- [ ] Extension works after browser restart
+
+### Edge Cases to Handle
+1. **Empty state:** User has 0 saves (show onboarding)
+2. **Massive dataset:** 10,000+ saves (test performance)
+3. **Network failure:** Reddit API down (queue sync for later)
+4. **Storage full:** IndexedDB quota exceeded (prompt to free space)
+5. **Token expired:** OAuth token invalid (auto-refresh)
+
+### Browser Compatibility
+- Test on: Chrome, Edge (Chromium), Brave
+- Verify: IndexedDB, fetch API, chrome.storage all work
+- No support for: Firefox (different extension API), Safari (no MV3)
+
+---
+
+## Common Patterns & Snippets
+
+### Async Storage Wrapper
+```javascript
+// Simple IndexedDB wrapper
+class Storage {
+  static async put(store, data) {
+    const db = await this.getDB();
+    return db.put(store, data);
+  }
+
+  static async get(store, key) {
+    const db = await this.getDB();
+    return db.get(store, key);
+  }
+
+  static async getAll(store) {
+    const db = await this.getDB();
+    return db.getAll(store);
+  }
+
+  static async delete(store, key) {
+    const db = await this.getDB();
+    return db.delete(store, key);
+  }
+}
+```
+
+### UI State Management (Simple)
+```javascript
+// Lightweight state management (no Redux needed)
+class State {
+  static data = {
+    saves: [],
+    filters: { subreddit: null, tags: [] },
+    view: 'all'
+  };
+
+  static listeners = [];
+
+  static set(key, value) {
+    this.data[key] = value;
+    this.notify();
+  }
+
+  static get(key) {
+    return this.data[key];
+  }
+
+  static subscribe(callback) {
+    this.listeners.push(callback);
+  }
+
+  static notify() {
+    this.listeners.forEach(cb => cb(this.data));
+  }
+}
+
+// Usage
+State.subscribe(data => {
+  if (data.saves) renderSaves(data.saves);
+});
+
+State.set('saves', newSaves); // Triggers re-render
+```
+
+### Debounced Search
+```javascript
+function debounce(func, delay) {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), delay);
+  };
+}
+
+// Usage
+const searchInput = document.getElementById('search');
+const debouncedSearch = debounce(query => {
+  const results = searchSaves(query);
+  displayResults(results);
+}, 300); // Wait 300ms after user stops typing
+
+searchInput.addEventListener('input', e => {
+  debouncedSearch(e.target.value);
+});
+```
+
+---
+
+## What NOT to Do (Anti-Patterns)
+
+❌ **Don't use localStorage for saves** (5MB limit, synchronous, slow)
+✅ Use IndexedDB (unlimited, async, fast)
+
+❌ **Don't fetch all saves on every search** (slow, wasteful)
+✅ Use Lunr.js pre-built index
+
+❌ **Don't store access tokens in localStorage** (insecure)
+✅ Use chrome.storage.local with encryption
+
+❌ **Don't make API calls on every user action** (rate limits)
+✅ Cache data locally, sync periodically
+
+❌ **Don't use eval() or inline scripts** (CSP violation)
+✅ Use external JS files, no dynamic code
+
+❌ **Don't block UI thread** (freezes extension)
+✅ Use async/await, web workers for heavy tasks
+
+❌ **Don't hardcode API keys** (security risk)
+✅ Use environment variables, inject at build time
+
+---
+
+## Development Workflow
+
+### 1. Starting a New Feature
+```bash
+# Create feature branch
+git checkout -b feature/tag-management
+
+# Update PRD if scope changes
+# Create/update feature spec in .cursor/features/
+# Write code with Cursor AI assistance
+# Test manually (see checklist above)
+# Commit with clear message
+git commit -m "feat: Add tag management UI with CRUD operations"
+```
+
+### 2. Debugging Issues
+```javascript
+// Use structured logging
+const logger = {
+  debug: (msg, data) => console.log(`[DEBUG] ${msg}`, data),
+  error: (msg, error) => console.error(`[ERROR] ${msg}`, error),
+  info: (msg) => console.info(`[INFO] ${msg}`)
+};
+
+// Enable debug mode via settings
+if (DEBUG_MODE) {
+  logger.debug('Search query', { query, filters, resultCount });
+}
+```
+
+### 3. Performance Profiling
+```javascript
+// Measure critical operations
+console.time('sync-saves');
+await syncSaves();
+console.timeEnd('sync-saves'); // "sync-saves: 2341ms"
+
+// IndexedDB performance
+console.time('db-query');
+const saves = await db.getAllFromIndex('saves', 'subreddit', 'programming');
+console.timeEnd('db-query'); // Should be <50ms for 1k saves
+```
+
+---
+
+## AI Assistant Guidelines (For Cursor)
+
+When I ask you to build something:
+
+1. **Reference this file first** - Follow all rules and patterns here
+2. **Check the PRD** - Ensure features match spec (`.cursor/project-brief.md`)
+3. **Use existing patterns** - Don't reinvent (see "Common Patterns" section)
+4. **Ask before breaking rules** - If you need to deviate, explain why
+5. **Write production code** - Include error handling, comments, types (JSDoc)
+6. **Think about edge cases** - Handle errors, empty states, offline mode
+7. **Optimize for performance** - Follow bundle size, load time targets
+8. **Keep it simple** - No over-engineering, YAGNI principle
+
+### When Generating Code
+- Always include error handling (try/catch)
+- Always escape user input (prevent XSS)
+- Always use async/await (no callback hell)
+- Always add JSDoc comments for functions
+- Always follow file/naming conventions
+
+### When Stuck
+- Ask: "What's the goal?" (refer to PRD)
+- Ask: "Is this the simplest solution?"
+- Ask: "Does this match existing patterns?"
+
+---
+
+## Quick Reference
+
+### Key Files to Know
+- `manifest.json` - Extension config (permissions, background script)
+- `src/popup/popup.js` - Main UI logic
+- `src/background/service-worker.js` - Background tasks (sync, OAuth)
+- `src/lib/storage.js` - IndexedDB wrapper
+- `src/lib/search.js` - Lunr.js integration
+- `src/lib/reddit-api.js` - Reddit API client
+
+### Key Constants
+```javascript
+const MAX_FREE_SAVES = 1000;
+const REDDIT_API_BASE = 'https://oauth.reddit.com';
+const SYNC_INTERVAL = 15 * 60 * 1000; // 15 minutes
+const SEARCH_DEBOUNCE = 300; // ms
+const DB_NAME = 'snooshelf';
+const DB_VERSION = 1;
+```
+
+### Useful Chrome APIs
+```javascript
+// Storage
+chrome.storage.local.set({ key: value });
+chrome.storage.local.get(['key']);
+
+// Tabs
+chrome.tabs.create({ url: 'https://reddit.com' });
+chrome.tabs.query({ active: true, currentWindow: true });
+
+// Messaging
+chrome.runtime.sendMessage({ action: 'sync' });
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {});
+
+// Badge (show count)
+chrome.action.setBadgeText({ text: '5' });
+chrome.action.setBadgeBackgroundColor({ color: '#FF4500' });
+```
+
+---
+
+## Version History
+- v1.0 - Initial .cursorrules (Oct 2025)
+
+---
+
+**Remember:** This extension is about privacy, simplicity, and user control. Every decision should support those values. When in doubt, keep it local, keep it simple, keep it secure.

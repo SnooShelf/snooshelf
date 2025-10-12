@@ -1,0 +1,37 @@
+# SnooShelf - Sensitive Files
+# Never commit these files to public repositories
+
+# Configuration files with sensitive data
+config.js
+config.local.js
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# API keys and secrets
+secrets.json
+api-keys.json
+
+# Local development files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Build artifacts
+dist/
+build/
