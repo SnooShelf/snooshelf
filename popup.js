@@ -146,6 +146,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Hide loading state
         showLoading(false);
         
+        
     } catch (error) {
         console.error('Error initializing popup:', error);
         showError('Failed to initialize popup');

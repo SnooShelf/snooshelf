@@ -1872,9 +1872,14 @@
         <p id="loadingOverlayText">Loading...</p>
     </div>
 
-    <script src="toast.js"></script>
+    <!-- Scripts in correct order -->
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="storage.js"></script>
+    <script src="reddit-api.js"></script>
     <script src="export.js"></script>
     <script src="cache.js"></script>
+    <script src="toast.js"></script>
     <script src="popup.js"></script>
 </body>
 </html>
