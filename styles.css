@@ -797,6 +797,38 @@ body {
     box-shadow: 0 0 0 2px rgba(255, 69, 0, 0.1);
 }
 
+.filter-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.clear-filter-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all var(--transition-normal);
+    display: none; /* Hidden by default, shown when filter active */
+}
+
+.clear-filter-btn:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-tertiary);
+}
+
+.filter-active .clear-filter-btn {
+    display: block;
+}
+
 
 /* ============================================================================
    DARK MODE SUPPORT (Future)

@@ -1514,10 +1514,13 @@
             <!-- Subreddit Filter -->
             <div class="filter-container">
                 <label for="subredditFilter" class="filter-label">Filter by Subreddit:</label>
-                <select id="subredditFilter" class="filter-select focusable">
-                    <option value="">All Subreddits</option>
-                    <!-- Options will be populated by JavaScript -->
-                </select>
+                <div class="filter-wrapper">
+                    <select id="subredditFilter" class="filter-select focusable">
+                        <option value="">All Subreddits</option>
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                    <button id="clearFilter" class="clear-filter-btn" title="Clear filter">×</button>
+                </div>
             </div>
 
             <!-- Search Bar -->

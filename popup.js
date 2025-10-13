@@ -29,6 +29,8 @@ const elements = {
     // Search and Filter
     searchInput: document.getElementById('searchInput'),
     subredditFilter: document.getElementById('subredditFilter'),
+    clearFilter: document.getElementById('clearFilter'),
+    filterContainer: document.querySelector('.filter-container'),
     
     // Stats
     statsSection: document.getElementById('statsSection'),
@@ -141,8 +143,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Setup event listeners
     setupEventListeners();
     
-    // Load subreddit filter options
-    await populateSubredditFilter();
+    // Load subreddit filter options and saved selection
+    if (currentState.isAuthenticated) {
+        await populateSubredditFilter();
+        await loadSavedFilter();
+    }
         
         // Initialize performance optimizations
         initializePerformanceOptimizations();
@@ -271,6 +276,7 @@ function setupEventListeners() {
     // Search and Filter
     elements.searchInput.addEventListener('input', handleSearch);
     elements.subredditFilter.addEventListener('change', handleSubredditFilter);
+    elements.clearFilter.addEventListener('click', clearSubredditFilter);
     
     // Stats accordion
     elements.statsHeader.addEventListener('click', toggleStatsSection);
@@ -551,6 +557,9 @@ async function loadSaves() {
             
             // Update export size estimate
             updateExportSizeEstimate(currentState.saves);
+            
+            // Populate subreddit filter after saves are loaded
+            await populateSubredditFilter();
         } else {
             // No saves yet, show empty state
             currentState.saves = [];
@@ -684,27 +693,12 @@ function handleSearch(event) {
     const query = event.target.value;
     currentState.searchQuery = query;
     
-    if (query.trim() === '') {
-        // Show all saves
-        currentState.filteredSaves = [...currentState.saves];
-    } else {
-        try {
-            // Use Lunr search engine
-            const results = searchEngine.search(query.trim());
-            currentState.filteredSaves = results;
-            console.log(`Search for "${query}" returned ${results.length} results`);
-        } catch (error) {
-            console.error('Search error:', error);
-            showError('Search failed. Please try again.');
-            currentState.filteredSaves = [...currentState.saves];
-        }
-    }
-
-    // Update the display
-    if (virtualScroller) {
-        virtualScroller.setFilteredData(currentState.filteredSaves);
-    } else if (paginationManager) {
-        paginationManager.setFilteredData(currentState.filteredSaves);
+    try {
+        // Apply both filter and search
+        applyFiltersAndSearch();
+    } catch (error) {
+        console.error('Search error:', error);
+        showError('Search failed. Please try again.');
     }
 }
 
@@ -1706,7 +1700,9 @@ function openUpgrade() {
  */
 async function populateSubredditFilter() {
     try {
+        console.log('Populating subreddit filter...');
         const subreddits = await storage.getUniqueSubreddits();
+        console.log('Got subreddits:', subreddits);
         
         // Clear existing options (except "All Subreddits")
         while (elements.subredditFilter.options.length > 1) {
@@ -1717,39 +1713,106 @@ async function populateSubredditFilter() {
         subreddits.forEach(({ name, count }) => {
             const option = document.createElement('option');
             option.value = name;
-            option.textContent = `${name} (${count} posts)`;
+            option.textContent = `${name} - ${count} post${count !== 1 ? 's' : ''}`;
             elements.subredditFilter.appendChild(option);
         });
+        
+        console.log(`Added ${subreddits.length} subreddits to filter`);
+        
+        // Show/hide clear button based on current selection
+        const selectedSubreddit = elements.subredditFilter.value;
+        elements.filterContainer.classList.toggle('filter-active', !!selectedSubreddit);
     } catch (error) {
         console.error('Error populating subreddit filter:', error);
+        showError('Failed to load subreddits');
     }
 }
 
 /**
  * Handle subreddit filter change
  */
-function handleSubredditFilter() {
+async function handleSubredditFilter() {
     const selectedSubreddit = elements.subredditFilter.value;
     
-    if (!selectedSubreddit) {
-        // "All Subreddits" selected - show all saves
-        currentState.filteredSaves = [...currentState.saves];
-    } else {
-        // Filter saves by selected subreddit
-        currentState.filteredSaves = currentState.saves.filter(save => 
+    // Save filter selection to storage
+    await chrome.storage.local.set({ selectedSubreddit });
+    
+    // Update UI state
+    elements.filterContainer.classList.toggle('filter-active', !!selectedSubreddit);
+    
+    // Apply combined filter and search
+    applyFiltersAndSearch();
+}
+
+/**
+ * Clear subreddit filter
+ */
+async function clearSubredditFilter() {
+    elements.subredditFilter.value = '';
+    elements.filterContainer.classList.remove('filter-active');
+    await chrome.storage.local.remove('selectedSubreddit');
+    applyFiltersAndSearch();
+}
+
+/**
+ * Apply both subreddit filter and search query
+ */
+function applyFiltersAndSearch() {
+    const selectedSubreddit = elements.subredditFilter.value;
+    const searchQuery = elements.searchInput.value.trim().toLowerCase();
+    
+    // Start with all saves
+    let filtered = [...currentState.saves];
+    
+    // Apply subreddit filter if selected
+    if (selectedSubreddit) {
+        filtered = filtered.filter(save => 
             `r/${save.subreddit}` === selectedSubreddit
         );
     }
     
-    // Update the display
-    if (virtualScroller) {
-        virtualScroller.setFilteredData(currentState.filteredSaves);
-    } else if (paginationManager) {
-        paginationManager.setFilteredData(currentState.filteredSaves);
+    // Apply search filter if query exists
+    if (searchQuery) {
+        filtered = filtered.filter(save => 
+            save.title.toLowerCase().includes(searchQuery) ||
+            save.subreddit.toLowerCase().includes(searchQuery) ||
+            (save.content && save.content.toLowerCase().includes(searchQuery))
+        );
     }
     
-    // Update save count
-    elements.savesCount.textContent = `${currentState.filteredSaves.length} saves`;
+    // Update filtered saves
+    currentState.filteredSaves = filtered;
+    
+    // Update display
+    if (virtualScroller) {
+        virtualScroller.setFilteredData(filtered);
+    } else if (paginationManager) {
+        paginationManager.setFilteredData(filtered);
+    }
+    
+    // Update save count with subreddit context
+    const count = filtered.length;
+    if (selectedSubreddit) {
+        elements.savesCount.textContent = `${count} result${count !== 1 ? 's' : ''} in ${selectedSubreddit}`;
+    } else {
+        elements.savesCount.textContent = `${count} save${count !== 1 ? 's' : ''}`;
+    }
+}
+
+/**
+ * Load saved filter selection
+ */
+async function loadSavedFilter() {
+    try {
+        const { selectedSubreddit } = await chrome.storage.local.get('selectedSubreddit');
+        if (selectedSubreddit) {
+            elements.subredditFilter.value = selectedSubreddit;
+            elements.filterContainer.classList.add('filter-active');
+            applyFiltersAndSearch();
+        }
+    } catch (error) {
+        console.error('Error loading saved filter:', error);
+    }
 }
 
 // ============================================================================
