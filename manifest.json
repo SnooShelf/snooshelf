@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "SnooShelf",
   "version": "0.1.0",
-  "description": "Unlimited local storage for your Reddit saves. Never lose a saved post again.",
+  "description": "Search, organize, and never lose your Reddit saves. Advanced filters, tags, and unlimited local storage.",
   
   "permissions": [
     "storage",
