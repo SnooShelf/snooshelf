@@ -26,8 +26,9 @@ const elements = {
     lastSync: document.getElementById('lastSync'),
     syncBtn: document.getElementById('syncBtn'),
     
-    // Search
+    // Search and Filter
     searchInput: document.getElementById('searchInput'),
+    subredditFilter: document.getElementById('subredditFilter'),
     
     // Stats
     statsSection: document.getElementById('statsSection'),
@@ -137,8 +138,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             await loadLastSyncTime();
         }
         
-        // Setup event listeners
-        setupEventListeners();
+    // Setup event listeners
+    setupEventListeners();
+    
+    // Load subreddit filter options
+    await populateSubredditFilter();
         
         // Initialize performance optimizations
         initializePerformanceOptimizations();
@@ -264,8 +268,9 @@ function setupEventListeners() {
     elements.syncBtn.addEventListener('click', handleSync);
     addRippleEffect(elements.syncBtn);
     
-    // Search
+    // Search and Filter
     elements.searchInput.addEventListener('input', handleSearch);
+    elements.subredditFilter.addEventListener('change', handleSubredditFilter);
     
     // Stats accordion
     elements.statsHeader.addEventListener('click', toggleStatsSection);
@@ -1690,6 +1695,61 @@ function openHelp() {
  */
 function openUpgrade() {
     chrome.tabs.create({ url: 'https://snooshelf.com/upgrade' });
+}
+
+// ============================================================================
+// SUBREDDIT FILTER FUNCTIONS
+// ============================================================================
+
+/**
+ * Populate subreddit filter dropdown with unique subreddits
+ */
+async function populateSubredditFilter() {
+    try {
+        const subreddits = await storage.getUniqueSubreddits();
+        
+        // Clear existing options (except "All Subreddits")
+        while (elements.subredditFilter.options.length > 1) {
+            elements.subredditFilter.remove(1);
+        }
+        
+        // Add options for each subreddit
+        subreddits.forEach(({ name, count }) => {
+            const option = document.createElement('option');
+            option.value = name;
+            option.textContent = `${name} (${count} posts)`;
+            elements.subredditFilter.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error populating subreddit filter:', error);
+    }
+}
+
+/**
+ * Handle subreddit filter change
+ */
+function handleSubredditFilter() {
+    const selectedSubreddit = elements.subredditFilter.value;
+    
+    if (!selectedSubreddit) {
+        // "All Subreddits" selected - show all saves
+        currentState.filteredSaves = [...currentState.saves];
+    } else {
+        // Filter saves by selected subreddit
+        currentState.filteredSaves = currentState.saves.filter(save => 
+            `r/${save.subreddit}` === selectedSubreddit
+        );
+    }
+    
+    // Update the display
+    if (virtualScroller) {
+        virtualScroller.setFilteredData(currentState.filteredSaves);
+    } else if (paginationManager) {
+        paginationManager.setFilteredData(currentState.filteredSaves);
+    }
+    
+    // Update save count
+    elements.savesCount.textContent = `${currentState.filteredSaves.length} saves`;
 }
 
 // ============================================================================
