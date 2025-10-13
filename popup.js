@@ -528,6 +528,10 @@ async function loadSaves() {
             // Cache the saves data
             cache.set(CACHE_KEYS.ALL_SAVES, currentState.saves, 10 * 60 * 1000); // 10 minutes
             
+            // Initialize search engine with saves
+            await searchEngine.buildSearchIndex();
+            console.log(`Search index built with ${currentState.saves.length} documents`);
+            
             // Initialize list rendering based on data size
             initializeListRendering(currentState.saves);
             
@@ -674,21 +678,24 @@ function handleSearch(event) {
     if (query.trim() === '') {
         // Show all saves
         currentState.filteredSaves = [...currentState.saves];
-        if (virtualScroller) {
-            virtualScroller.setFilteredData(currentState.filteredSaves);
-        } else if (paginationManager) {
-            paginationManager.setFilteredData(currentState.filteredSaves);
-        }
     } else {
-        // Use cached search results
-        const results = getCachedSearchResults(query, currentState.saves);
-        currentState.filteredSaves = results;
-        
-        if (virtualScroller) {
-            virtualScroller.setFilteredData(currentState.filteredSaves);
-        } else if (paginationManager) {
-            paginationManager.setFilteredData(currentState.filteredSaves);
+        try {
+            // Use Lunr search engine
+            const results = searchEngine.search(query.trim());
+            currentState.filteredSaves = results;
+            console.log(`Search for "${query}" returned ${results.length} results`);
+        } catch (error) {
+            console.error('Search error:', error);
+            showError('Search failed. Please try again.');
+            currentState.filteredSaves = [...currentState.saves];
         }
+    }
+
+    // Update the display
+    if (virtualScroller) {
+        virtualScroller.setFilteredData(currentState.filteredSaves);
+    } else if (paginationManager) {
+        paginationManager.setFilteredData(currentState.filteredSaves);
     }
 }
 

@@ -1,56 +1,72 @@
 /**
- * search-engine.js
+ * SearchEngine class
  * Handles search functionality using Lunr.js for SnooShelf
  */
-
 class SearchEngine {
+  /**
+   * Initialize empty search index
+   */
   constructor() {
     this.index = null;
     this.documents = new Map(); // Store original documents for retrieval
   }
 
   /**
-   * Initialize or update the search index with Reddit saves
-   * @param {Array} saves - Array of Reddit save objects
+   * Build search index from all saves in IndexedDB
+   * @returns {Promise<void>}
    */
-  initializeIndex(saves) {
-    // Store original documents
-    this.documents.clear();
-    saves.forEach(save => this.documents.set(save.id, save));
+  async buildSearchIndex() {
+    try {
+      // Get all saves from IndexedDB
+      const saves = await SnooShelfStorage.getAllPosts();
 
-    // Create the search index
-    this.index = lunr(function() {
-      // Define boost values for different fields
-      this.field('title', { boost: 10 }); // Title matches are most important
-      this.field('selftext', { boost: 5 }); // Post content is next
-      this.field('subreddit', { boost: 3 }); // Subreddit is useful for filtering
-      this.field('author'); // Author has normal weight
+      if (!saves || saves.length === 0) {
+        console.warn('No saves found in IndexedDB to index');
+        return;
+      }
 
-      // The ref field is the unique identifier for the document
-      this.ref('id');
+      // Store original documents for retrieval
+      this.documents.clear();
+      saves.forEach(save => this.documents.set(save.id, save));
 
-      // Add each save to the index
-      saves.forEach(function(save) {
-        this.add({
-          id: save.id,
-          title: save.title || '',
-          selftext: save.selftext || '',
-          subreddit: save.subreddit || '',
-          author: save.author || ''
-        });
-      }, this);
-    });
+      // Create the search index
+      this.index = lunr(function() {
+        // Define fields with boost values
+        this.field('title', { boost: 3 });      // Title matches are most important
+        this.field('selftext', { boost: 2 });   // Post content is next
+        this.field('subreddit', { boost: 1.5 }); // Subreddit is useful for filtering
+        this.field('author', { boost: 1 });     // Author has normal weight
+
+        // The ref field is the unique identifier for the document
+        this.ref('id');
+
+        // Add each save to the index
+        saves.forEach(function(save) {
+          this.add({
+            id: save.id,
+            title: save.title || '',
+            selftext: save.selftext || '',
+            subreddit: save.subreddit || '',
+            author: save.author || ''
+          });
+        }, this);
+      });
+
+      console.log(`Search index built with ${saves.length} documents`);
+    } catch (error) {
+      console.error('Failed to build search index:', error);
+      throw new Error('Search index build failed');
+    }
   }
 
   /**
    * Search the index for saves matching the query
    * @param {string} query - The search query
-   * @param {Object} options - Search options (e.g., filters)
    * @returns {Array} Array of matching saves with scores
    */
-  search(query, options = {}) {
+  search(query) {
     if (!this.index) {
-      throw new Error('Search index not initialized');
+      throw new Error('Search index not initialized. Call buildSearchIndex() first.');
     }
 
     try {
@@ -69,22 +85,22 @@ class SearchEngine {
   }
 
   /**
-   * Clear the search index and document store
-   */
-  clearIndex() {
-    this.index = null;
-    this.documents.clear();
-  }
-
-  /**
    * Get the total number of documents in the index
    * @returns {number} Number of indexed documents
    */
   getDocumentCount() {
     return this.documents.size;
   }
+
+  /**
+   * Check if the search index is built
+   * @returns {boolean} True if index is built
+   */
+  isIndexBuilt() {
+    return this.index !== null;
+  }
 }
 
-// Create and expose a singleton instance globally
+// Create instance and make it globally available
 const searchEngine = new SearchEngine();
 window.searchEngine = searchEngine;
