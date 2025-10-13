@@ -35,6 +35,7 @@ class SearchEngine {
         this.field('title', { boost: 3 });      // Title matches are most important
         this.field('selftext', { boost: 2 });   // Post content is next
         this.field('subreddit', { boost: 1.5 }); // Subreddit is useful for filtering
+        this.field('subreddit_prefixed', { boost: 1.5 }); // Also index with r/ prefix
         this.field('author', { boost: 1 });     // Author has normal weight
 
         // The ref field is the unique identifier for the document
@@ -42,13 +43,22 @@ class SearchEngine {
 
         // Add each save to the index
         saves.forEach(function(save) {
-          this.add({
+          // Create document with both subreddit formats
+          const doc = {
             id: save.id,
             title: save.title || '',
             selftext: save.selftext || '',
             subreddit: save.subreddit || '',
+            subreddit_prefixed: `r/${save.subreddit || ''}`, // Add r/ version
             author: save.author || ''
-          });
+          };
+          
+          // Log the first document to verify structure
+          if (saves.indexOf(save) === 0) {
+            console.log('Sample document being indexed:', doc);
+          }
+
+          this.add(doc);
         }, this);
       });
 
@@ -70,8 +80,11 @@ class SearchEngine {
     }
 
     try {
+      // Clean up query - remove r/ prefix if searching for subreddit
+      const cleanQuery = query.trim().replace(/^r\//, '');
+
       // Perform the search
-      const results = this.index.search(query);
+      const results = this.index.search(cleanQuery);
 
       // Map results to original documents and include score
       return results.map(result => ({
