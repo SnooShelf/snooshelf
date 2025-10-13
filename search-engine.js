@@ -18,7 +18,7 @@ class SearchEngine {
   async buildSearchIndex() {
     try {
       // Get all saves from IndexedDB
-      const saves = await SnooShelfStorage.getAllPosts();
+      const saves = await storage.getAllPosts();
 
       if (!saves || saves.length === 0) {
         console.warn('No saves found in IndexedDB to index');
@@ -114,6 +114,8 @@ class SearchEngine {
   }
 }
 
-// Create instance and make it globally available
+// Create instance and make it globally available in popup context
 const searchEngine = new SearchEngine();
-window.searchEngine = searchEngine;
+if (typeof window !== 'undefined') {
+  window.searchEngine = searchEngine;
+}

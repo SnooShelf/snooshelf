@@ -5,9 +5,15 @@
  */
 
 // Import configuration and libraries
-importScripts('config.js');
-importScripts('reddit-api.js');
-importScripts('storage.js');
+try {
+    importScripts(
+        'config.js',
+        'reddit-api.js',
+        'storage.js'
+    );
+} catch (error) {
+    console.error('Error loading scripts:', error);
+}
 
 
 // ============================================================================
@@ -306,7 +312,7 @@ async function handleSyncSaves(message, sendResponse) {
         console.log(`Fetched ${allPosts.length} posts from Reddit`);
         
         // Save posts to IndexedDB
-        const savedCount = await SnooShelfStorage.savePosts(allPosts);
+        const savedCount = await storage.savePosts(allPosts);
         
         console.log(`Saved ${savedCount} posts to local storage`);
         
@@ -681,14 +687,6 @@ async function clearAllStorage() {
 // DEVELOPMENT HELPERS
 // ============================================================================
 
-// Expose utility functions to console for development
-if (typeof window !== 'undefined') {
-    window.SnooShelfDebug = {
-        getStorageState: getCurrentStorageState,
-        clearStorage: clearAllStorage
-    };
-}
-
 // Log service worker status
 console.log('SnooShelf background service worker loaded successfully');
 
@@ -701,7 +699,7 @@ async function handleClearAllSaves(message, sendResponse) {
         console.log('Clearing all saves...');
         
         // Clear saves from IndexedDB
-        await SnooShelfStorage.clearAllPosts();
+        await storage.clearAllPosts();
         
         // Clear saves from chrome.storage.local
         await chrome.storage.local.remove(['saves', 'totalSaves', 'lastSync']);
@@ -725,7 +723,7 @@ async function handleClearAllData(message, sendResponse) {
         console.log('Clearing all data...');
         
         // Clear all posts from IndexedDB
-        await SnooShelfStorage.clearAllPosts();
+        await storage.clearAllPosts();
         
         // Clear cache if available
         if (typeof CacheInvalidation !== 'undefined') {

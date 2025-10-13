@@ -4,6 +4,7 @@
    CSS VARIABLES & BASE STYLES
    ============================================================================ */
 
+/* Light mode (default) */
 :root {
     /* Colors */
     --primary-orange: #FF4500;
@@ -12,14 +13,24 @@
     --error-red: #dc3545;
     --warning-yellow: #ffc107;
     --info-blue: #007bff;
-    --text-primary: #1a1a1b;
-    --text-secondary: #666;
-    --text-muted: #999;
+    
+    /* Text colors - all dark for readability */
+    --text-primary: #000000;
+    --text-secondary: #333333;
+    --text-muted: #666666;
     --bg-primary: #ffffff;
     --bg-secondary: #f8f9fa;
     --bg-tertiary: #e9ecef;
+    --bg-card: #ffffff;
     --border-color: #ddd;
     --border-focus: #FF4500;
+    
+    /* Input colors */
+    --input-bg: #ffffff;
+    --input-text: #000000;
+    --input-border: #ddd;
+    --input-focus-border: #FF4500;
+    --input-placeholder: #666666;
     
     /* Spacing */
     --spacing-xs: 4px;
@@ -56,6 +67,33 @@ body {
     line-height: 1.5;
     color: var(--text-primary);
     background: var(--bg-primary);
+    font-weight: 400;
+}
+
+/* Text styles */
+.last-synced {
+    color: #333333;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.stats-text, .card-text, .card-label, .oldest-text, .newest-text {
+    color: #000000;
+    font-weight: 500;
+}
+
+.section-title {
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+}
+
+.no-data {
+    color: #666666;
+    font-style: italic;
+    text-align: center;
+    padding: var(--spacing-md);
 }
 
 /* ============================================================================
@@ -726,14 +764,38 @@ body {
    DARK MODE SUPPORT (Future)
    ============================================================================ */
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --text-primary: #ffffff;
-        --text-secondary: #cccccc;
-        --text-muted: #999999;
-        --bg-primary: #1a1a1b;
-        --bg-secondary: #2d2d30;
-        --bg-tertiary: #3d3d40;
-        --border-color: #4d4d50;
-    }
+/* Form elements */
+input, select, textarea, .search-bar {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #ddd;
+    font-weight: 400;
+}
+
+input::placeholder, select::placeholder, textarea::placeholder {
+    color: #666666;
+}
+
+input:focus, select:focus, textarea:focus, .search-bar:focus {
+    border-color: #FF4500;
+    box-shadow: 0 0 0 2px rgba(255, 69, 0, 0.2);
+}
+
+/* Loading states */
+.loading-overlay {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.loading-skeleton {
+    background: linear-gradient(90deg, 
+        #e9ecef 25%, 
+        #f8f9fa 50%, 
+        #e9ecef 75%
+    );
+}
+
+/* Search results */
+.search-highlight {
+    background: rgba(255, 69, 0, 0.2);
+    color: #000000;
 }

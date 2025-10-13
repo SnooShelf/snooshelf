@@ -564,7 +564,11 @@ async function loadSaves() {
         
     } catch (error) {
         console.error('Error loading saves:', error);
-        showError('Failed to load saves');
+        // Only show error if we actually failed to load saves
+        // Don't show error for empty state (no saves yet)
+        if (error.message !== 'No saves found') {
+            showError('Failed to load saves');
+        }
         showEmptyState();
     } finally {
         showSkeletonLoading(false);

@@ -1,6 +1,6 @@
 // storage.js - IndexedDB storage manager for SnooShelf
 
-const SnooShelfStorage = {
+const storage = {
   
   // Initialize the IndexedDB database
   async initDatabase() {
@@ -303,5 +303,54 @@ const SnooShelfStorage = {
       console.error('Error getting stats:', error);
       throw error;
     }
+  },
+
+  /**
+   * Get all unique subreddits with their post counts
+   * @returns {Promise<Array<{name: string, count: number}>>} Array of subreddit objects with name and count
+   */
+  async getUniqueSubreddits() {
+    try {
+      const allPosts = await this.getAllPosts();
+      
+      // Create a Map to store subreddit counts
+      const subredditMap = new Map();
+      
+      // Count posts for each subreddit
+      allPosts.forEach(post => {
+        if (!post.subreddit) {
+          // Handle null/undefined subreddits
+          const key = '[deleted]';
+          subredditMap.set(key, (subredditMap.get(key) || 0) + 1);
+          return;
+        }
+        
+        // Remove 'r/' prefix if present and normalize
+        const subredditName = post.subreddit.replace(/^r\//, '').trim();
+        if (subredditName) {
+          const key = `r/${subredditName}`;
+          subredditMap.set(key, (subredditMap.get(key) || 0) + 1);
+        }
+      });
+      
+      // Convert Map to array and sort alphabetically
+      const subreddits = Array.from(subredditMap.entries()).map(([name, count]) => ({
+        name,
+        count
+      })).sort((a, b) => a.name.localeCompare(b.name));
+      
+      console.log(`Found ${subreddits.length} unique subreddits`);
+      return subreddits;
+      
+    } catch (error) {
+      console.error('Error getting unique subreddits:', error);
+      throw new Error(`Failed to get unique subreddits: ${error.message}`);
+    }
   }
 };
+
+// Make storage functions globally available only in popup context
+if (typeof window !== 'undefined') {
+  // Export the storage object directly in popup context
+  window.storage = storage;
+}
