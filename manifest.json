@@ -53,7 +53,7 @@
           "matches": ["*://*.reddit.com/*"]
         },
         {
-          "resources": ["config.js", "reddit-api.js", "storage.js", "export.js", "cache.js", "settings.html", "settings.js"],
+          "resources": ["config.js", "reddit-api.js", "storage.js", "export.js", "cache.js", "settings.html", "settings.js", "lib/lunr.min.js", "search-engine.js"],
           "matches": ["<all_urls>"]
         }
       ],
