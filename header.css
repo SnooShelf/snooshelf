@@ -1,0 +1,146 @@
+/* Header */
+.header {
+    background: var(--primary-orange);
+    color: white;
+    padding: var(--spacing-md) var(--spacing-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-md);
+}
+
+.header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Header Actions */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* Settings Button */
+.settings-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: var(--spacing-xs);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.settings-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.settings-icon {
+    font-size: 14px;
+    display: block;
+}
+
+/* Logout Button */
+.logout-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.logout-btn .icon-logout {
+    font-size: 14px;
+}
+
+/* Logo */
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.logo {
+    width: 32px;
+    height: 32px;
+}
+
+.logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+}
+
+/* Welcome Message */
+.welcome {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.welcome h2 {
+    font-size: 20px;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.welcome p {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+/* Sync Section */
+.sync-section {
+    padding: var(--spacing-md);
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    margin-bottom: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.sync-stats {
+    margin-bottom: var(--spacing-sm);
+}
+
+.save-count {
+    font-size: 16px;
+    margin: 0 0 var(--spacing-xs) 0;
+    color: var(--text-primary);
+}
+
+.save-count strong {
+    font-size: 20px;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.last-sync {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.last-sync span {
+    font-weight: 600;
+    color: var(--text-primary);
+}

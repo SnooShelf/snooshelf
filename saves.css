@@ -1,0 +1,338 @@
+/* Saves List Container */
+.saves-list {
+    margin-top: var(--spacing-md);
+}
+
+/* Save Card */
+.save-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    transition: all var(--transition-normal);
+    cursor: pointer;
+}
+
+.save-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-orange);
+}
+
+/* Save Card Header */
+.save-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-sm);
+}
+
+.save-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.4;
+    flex: 1;
+    margin-right: var(--spacing-md);
+}
+
+.save-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.save-title a:hover {
+    color: var(--primary-orange);
+}
+
+/* Save Metadata */
+.save-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-sm);
+}
+
+.subreddit {
+    color: var(--primary-orange);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.subreddit:hover {
+    text-decoration: underline;
+}
+
+.author {
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.author:hover {
+    color: var(--text-primary);
+}
+
+.date {
+    color: var(--text-muted);
+}
+
+/* Save Content */
+.save-content {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.6;
+}
+
+/* Save Tags */
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
+}
+
+.tag {
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all var(--transition-normal);
+}
+
+.tag:hover {
+    background: var(--primary-orange);
+    color: white;
+}
+
+/* Save Actions */
+.save-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    padding: var(--spacing-xs);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: 12px;
+}
+
+.action-btn:hover {
+    color: var(--primary-orange);
+    background: var(--bg-secondary);
+}
+
+.action-btn .icon {
+    font-size: 14px;
+}
+
+/* Save Types */
+.save-type {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.save-type-post {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.save-type-comment {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-xl) var(--spacing-lg);
+    background: var(--bg-primary);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.empty-state h3 {
+    font-size: 18px;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.empty-state p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Loading Skeleton */
+.save-skeleton {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.skeleton-title {
+    height: 24px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    margin-bottom: var(--spacing-sm);
+    animation: pulse 1.5s infinite;
+}
+
+.skeleton-meta {
+    height: 16px;
+    width: 60%;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    margin-bottom: var(--spacing-sm);
+    animation: pulse 1.5s infinite;
+}
+
+.skeleton-content {
+    height: 48px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Compact View */
+.compact-view .save-card {
+    padding: var(--spacing-sm);
+}
+
+.compact-view .save-title {
+    font-size: 14px;
+}
+
+.compact-view .save-content {
+    display: none;
+}
+
+.compact-view .save-meta {
+    margin-bottom: 0;
+}
+
+/* Infinite Scroll */
+.load-more {
+    text-align: center;
+    padding: var(--spacing-md);
+}
+
+.load-more-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.load-more-btn:hover {
+    border-color: var(--primary-orange);
+    color: var(--primary-orange);
+}
+
+/* Search Highlight */
+.highlight {
+    background: rgba(255, 69, 0, 0.1);
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+/* Result Count */
+.result-count {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-md);
+}
+
+.result-count strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Sort Controls */
+.sort-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.sort-label {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.sort-select {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    cursor: pointer;
+}
+
+.sort-select:focus {
+    outline: none;
+    border-color: var(--primary-orange);
+    box-shadow: var(--shadow-focus);
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .save-card {
+        background: var(--bg-primary);
+    }
+
+    .tag {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .save-type-post {
+        background: rgba(25, 118, 210, 0.1);
+    }
+
+    .save-type-comment {
+        background: rgba(123, 31, 162, 0.1);
+    }
+
+    .highlight {
+        background: rgba(255, 69, 0, 0.2);
+    }
+}
