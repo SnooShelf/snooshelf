@@ -1,0 +1,233 @@
+/**
+ * SnooShelf - base.css
+ * Base styles for body, typography, and common elements
+ */
+
+/* ============================================
+   BODY & HTML
+   ============================================ */
+
+   html {
+    font-size: 16px;
+  }
+  
+  body {
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-normal);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+  
+  
+  /* ============================================
+     TYPOGRAPHY
+     ============================================ */
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+  
+  h1 {
+    font-size: var(--font-size-3xl);
+  }
+  
+  h2 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  h3 {
+    font-size: var(--font-size-xl);
+  }
+  
+  h4 {
+    font-size: var(--font-size-lg);
+  }
+  
+  p {
+    margin: 0;
+    color: var(--color-text-primary);
+  }
+  
+  small {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+  
+  
+  /* ============================================
+     LINKS
+     ============================================ */
+  
+  a {
+    color: var(--color-accent-blue);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+  
+  a:hover {
+    color: var(--color-accent-orange);
+  }
+  
+  
+  /* ============================================
+     SCROLLBARS (Webkit)
+     ============================================ */
+  
+  /* Custom scrollbar styling for Chrome/Safari */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-sm);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: var(--radius-sm);
+    transition: background var(--transition-fast);
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-secondary);
+  }
+  
+  
+  /* ============================================
+     SELECTION
+     ============================================ */
+  
+  ::selection {
+    background-color: rgba(0, 121, 211, 0.2);
+    color: var(--color-text-primary);
+  }
+  
+  ::-moz-selection {
+    background-color: rgba(0, 121, 211, 0.2);
+    color: var(--color-text-primary);
+  }
+  
+  
+  /* ============================================
+     UTILITY CLASSES
+     ============================================ */
+  
+  /* Text utilities */
+  .text-primary {
+    color: var(--color-text-primary);
+  }
+  
+  .text-secondary {
+    color: var(--color-text-secondary);
+  }
+  
+  .text-muted {
+    color: var(--color-text-muted);
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .text-left {
+    text-align: left;
+  }
+  
+  .text-right {
+    text-align: right;
+  }
+  
+  /* Font weight utilities */
+  .font-normal {
+    font-weight: var(--font-weight-normal);
+  }
+  
+  .font-medium {
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .font-semibold {
+    font-weight: var(--font-weight-semibold);
+  }
+  
+  .font-bold {
+    font-weight: var(--font-weight-bold);
+  }
+  
+  /* Display utilities */
+  .hidden {
+    display: none !important;
+  }
+  
+  .flex {
+    display: flex;
+  }
+  
+  .flex-column {
+    flex-direction: column;
+  }
+  
+  .items-center {
+    align-items: center;
+  }
+  
+  .justify-center {
+    justify-content: center;
+  }
+  
+  .justify-between {
+    justify-content: space-between;
+  }
+  
+  /* Spacing utilities */
+  .gap-xs { gap: var(--spacing-xs); }
+  .gap-sm { gap: var(--spacing-sm); }
+  .gap-md { gap: var(--spacing-md); }
+  .gap-lg { gap: var(--spacing-lg); }
+  
+  .mt-xs { margin-top: var(--spacing-xs); }
+  .mt-sm { margin-top: var(--spacing-sm); }
+  .mt-md { margin-top: var(--spacing-md); }
+  .mt-lg { margin-top: var(--spacing-lg); }
+  .mt-xl { margin-top: var(--spacing-xl); }
+  
+  .mb-xs { margin-bottom: var(--spacing-xs); }
+  .mb-sm { margin-bottom: var(--spacing-sm); }
+  .mb-md { margin-bottom: var(--spacing-md); }
+  .mb-lg { margin-bottom: var(--spacing-lg); }
+  .mb-xl { margin-bottom: var(--spacing-xl); }
+  
+  
+  /* ============================================
+     COMMON PATTERNS
+     ============================================ */
+  
+  /* Smooth transitions for interactive elements */
+  .interactive {
+    transition: all var(--transition-normal);
+    cursor: pointer;
+  }
+  
+  /* Disabled state */
+  .disabled,
+  [disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  /* Loading state */
+  .loading {
+    opacity: 0.6;
+    pointer-events: none;
+  }

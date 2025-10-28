@@ -1,0 +1,379 @@
+/**
+ * SnooShelf - settings.css
+ * Settings page specific styles
+ */
+
+/* ============================================
+   SETTINGS PAGE DIMENSIONS
+   ============================================ */
+
+   body {
+    width: var(--settings-width);
+    height: var(--settings-height);
+    overflow: hidden;
+  }
+  
+  
+  /* ============================================
+     SETTINGS CONTAINER
+     ============================================ */
+  
+  .settings-container {
+    width: 100%;
+    height: 100%;
+    padding: var(--spacing-xl);
+    overflow-y: auto;
+    background: var(--color-bg-primary);
+  }
+  
+  
+  /* ============================================
+     SETTINGS HEADER
+     ============================================ */
+  
+  .settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .back-button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-secondary);
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 20px;
+    transition: all var(--transition-fast);
+  }
+  
+  .back-button:hover {
+    background: var(--color-bg-hover);
+    transform: scale(1.05);
+  }
+  
+  .settings-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+  }
+  
+  
+  /* ============================================
+     SETTINGS SECTIONS
+     ============================================ */
+  
+  .settings-section {
+    padding: var(--spacing-lg) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .settings-section:last-child {
+    border-bottom: none;
+  }
+  
+  .section-title {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  
+  /* ============================================
+     SETTING ROWS
+     ============================================ */
+  
+  .setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-sm) 0;
+    gap: var(--spacing-lg);
+  }
+  
+  .setting-info {
+    flex: 1;
+  }
+  
+  .setting-label {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
+  }
+  
+  .setting-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+  
+  .setting-value {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+  }
+  
+  .setting-control {
+    flex-shrink: 0;
+  }
+  
+  
+  /* ============================================
+     FORM CONTROLS IN SETTINGS
+     ============================================ */
+  
+  .settings-section .select {
+    min-width: 200px;
+  }
+  
+  .settings-section .input {
+    min-width: 200px;
+  }
+  
+  .settings-section .checkbox {
+    width: 20px;
+    height: 20px;
+  }
+  
+  
+  /* ============================================
+     BUTTONS IN SETTINGS
+     ============================================ */
+  
+  .settings-section .btn {
+    min-width: 120px;
+  }
+  
+  /* Disconnect/Delete buttons (danger) */
+  .btn-disconnect,
+  .btn-delete {
+    background: var(--color-error);
+    color: white;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+  }
+  
+  .btn-disconnect:hover,
+  .btn-delete:hover {
+    background: #c82333;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+  }
+  
+  /* Export button */
+  .btn-export {
+    background: var(--color-accent-orange);
+    color: white;
+    box-shadow: var(--shadow-orange);
+  }
+  
+  .btn-export:hover {
+    background: #E03D00;
+    box-shadow: var(--shadow-orange-hover);
+  }
+  
+  /* Clear cache button */
+  .btn-clear-cache {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+  }
+  
+  .btn-clear-cache:hover {
+    background: var(--color-bg-hover);
+    border-color: var(--color-text-secondary);
+  }
+  
+  
+  /* ============================================
+     ACCOUNT SECTION
+     ============================================ */
+  
+  .account-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .account-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-accent-orange);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+  }
+  
+  .account-details {
+    flex: 1;
+  }
+  
+  .account-username {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+  }
+  
+  .account-status {
+    font-size: var(--font-size-sm);
+    color: var(--color-success);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .account-status::before {
+    content: "●";
+    font-size: 12px;
+  }
+  
+  
+  /* ============================================
+     STORAGE INFO
+     ============================================ */
+  
+  .storage-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .storage-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--font-size-sm);
+  }
+  
+  .storage-stat-label {
+    color: var(--color-text-secondary);
+  }
+  
+  .storage-stat-value {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+  }
+  
+  
+  /* ============================================
+     EXPORT FORMAT SELECTOR
+     ============================================ */
+  
+  .export-format-group {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .format-option {
+    flex: 1;
+    padding: var(--spacing-sm);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    background: var(--color-bg-primary);
+  }
+  
+  .format-option:hover {
+    border-color: var(--color-accent-blue);
+  }
+  
+  .format-option.selected {
+    border-color: var(--color-accent-orange);
+    background: rgba(255, 69, 0, 0.05);
+  }
+  
+  .format-option input[type="radio"] {
+    display: none;
+  }
+  
+  .format-label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+  }
+  
+  
+  /* ============================================
+     VERSION INFO
+     ============================================ */
+  
+  .version-info {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    font-family: 'Courier New', monospace;
+  }
+  
+  
+  /* ============================================
+     DANGER ZONE
+     ============================================ */
+  
+  .danger-zone {
+    background: rgba(220, 53, 69, 0.05);
+    border: 1px solid rgba(220, 53, 69, 0.2);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-md);
+  }
+  
+  .danger-zone-title {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-error);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .danger-zone-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-md);
+    line-height: var(--line-height-relaxed);
+  }
+  
+  
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+  
+  @media (max-width: 650px) {
+    .settings-container {
+      padding: var(--spacing-md);
+    }
+    
+    .setting-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .setting-control {
+      width: 100%;
+    }
+    
+    .settings-section .select,
+    .settings-section .input {
+      width: 100%;
+    }
+  }

@@ -1,0 +1,381 @@
+/**
+ * SnooShelf - popup.css
+ * Main popup specific styles (two-column layout, sidebar, main content)
+ */
+
+/* ============================================
+   POPUP DIMENSIONS
+   ============================================ */
+
+   body {
+    width: var(--popup-width);
+    height: var(--popup-height);
+    overflow: hidden;
+  }
+  
+  
+  /* ============================================
+     APP CONTAINER (Two-Column Layout)
+     ============================================ */
+  
+  .app-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  
+  /* ============================================
+     SIDEBAR (Left Column)
+     ============================================ */
+  
+  .sidebar {
+    width: var(--sidebar-width);
+    height: 100%;
+    background: var(--color-bg-secondary);
+    border-right: 1px solid var(--color-border);
+    padding: var(--spacing-lg) var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  
+  /* Branding */
+  .brand {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  /* Username display */
+  .username {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  /* Section titles (TAGS, FOLDERS) */
+  .sidebar .section-title {
+    margin-top: var(--spacing-lg);
+  }
+  
+  .sidebar .section-title:first-of-type {
+    margin-top: 0;
+  }
+  
+  /* Lists */
+  .item-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  /* List items (tags, folders) */
+  .item-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    font-size: var(--font-size-base);
+    color: var(--color-text-primary);
+  }
+  
+  .item-row:hover {
+    background: var(--color-bg-hover);
+  }
+  
+  .item-row.active {
+    background: var(--color-bg-hover);
+    font-weight: var(--font-weight-medium);
+  }
+  
+  /* Folder icon */
+  .folder-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  
+  /* Empty text (when no tags/folders) */
+  .empty-text {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-style: italic;
+  }
+  
+  
+  /* ============================================
+     MAIN CONTENT (Right Column)
+     ============================================ */
+  
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg-primary);
+    overflow: hidden;
+  }
+  
+  
+  /* ============================================
+     TOP BAR
+     ============================================ */
+  
+  .top-bar {
+    padding: var(--spacing-md) var(--spacing-lg);
+    display: flex;
+    justify-content: flex-end;
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .extension-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: all var(--transition-fast);
+  }
+  
+  .extension-btn:hover {
+    background: var(--color-bg-hover);
+    transform: scale(1.05);
+  }
+  
+  
+  /* ============================================
+     SEARCH SECTION
+     ============================================ */
+  
+  .search-section {
+    padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .search-container {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: var(--color-text-secondary);
+    pointer-events: none;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg) var(--spacing-md) 56px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-lg);
+    font-family: var(--font-family);
+    color: var(--color-text-primary);
+    transition: all var(--transition-normal);
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: var(--color-accent-blue);
+    box-shadow: 0 0 0 3px rgba(0, 121, 211, 0.1);
+  }
+  
+  .search-input::placeholder {
+    color: var(--color-text-muted);
+  }
+  
+  .search-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  
+  /* ============================================
+     FILTERS BAR
+     ============================================ */
+  
+  .filters-bar {
+    padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    border-bottom: 1px solid var(--color-border);
+    flex-wrap: wrap;
+  }
+  
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+  
+  .filter-label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .filter-select {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-family: var(--font-family);
+    color: var(--color-text-primary);
+    background: var(--color-bg-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    min-width: 150px;
+  }
+  
+  .filter-select:hover {
+    border-color: var(--color-accent-blue);
+  }
+  
+  .filter-select:focus {
+    outline: none;
+    border-color: var(--color-accent-blue);
+    box-shadow: 0 0 0 3px rgba(0, 121, 211, 0.1);
+  }
+  
+  .subreddit-input {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-family: var(--font-family);
+    color: var(--color-text-primary);
+    background: var(--color-bg-primary);
+    transition: all var(--transition-fast);
+    min-width: 200px;
+  }
+  
+  .subreddit-input::placeholder {
+    color: var(--color-text-muted);
+  }
+  
+  .subreddit-input:hover {
+    border-color: var(--color-accent-blue);
+  }
+  
+  .subreddit-input:focus {
+    outline: none;
+    border-color: var(--color-accent-blue);
+    box-shadow: 0 0 0 3px rgba(0, 121, 211, 0.1);
+  }
+  
+  .date-range-inputs {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+  
+  .date-input {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-family: var(--font-family);
+    color: var(--color-text-primary);
+    background: var(--color-bg-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  
+  .date-input:hover {
+    border-color: var(--color-accent-blue);
+  }
+  
+  .date-input:focus {
+    outline: none;
+    border-color: var(--color-accent-blue);
+    box-shadow: 0 0 0 3px rgba(0, 121, 211, 0.1);
+  }
+  
+  .date-separator {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+  
+  .filter-divider {
+    width: 1px;
+    height: 24px;
+    background: var(--color-border);
+  }
+  
+  .clear-filters-btn {
+    margin-left: auto;
+    padding: var(--spacing-xs) var(--spacing-md);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .clear-filters-btn:hover {
+    border-color: var(--color-accent-orange);
+    color: var(--color-accent-orange);
+    background: rgba(255, 69, 0, 0.05);
+  }
+  
+  
+  /* ============================================
+     SAVES CONTAINER
+     ============================================ */
+  
+  .saves-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-lg);
+  }
+  
+  /* When saves container has the empty state */
+  .saves-container .empty-state {
+    height: 100%;
+  }
+  
+  
+  /* ============================================
+     RESPONSIVE (Fallback for smaller sizes)
+     ============================================ */
+  
+  @media (max-width: 800px) {
+    .sidebar {
+      width: 240px;
+    }
+    
+    .search-section {
+      padding: var(--spacing-lg) var(--spacing-md);
+    }
+    
+    .filters-bar {
+      padding: 0 var(--spacing-md) var(--spacing-md) var(--spacing-md);
+    }
+    
+    .saves-container {
+      padding: var(--spacing-md);
+    }
+  }

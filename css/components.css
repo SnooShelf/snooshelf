@@ -1,0 +1,434 @@
+/**
+ * SnooShelf - components.css
+ * Reusable components (buttons, inputs, cards, tags, badges)
+ */
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+/* Base button styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: 12px 24px;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    text-align: center;
+    white-space: nowrap;
+  }
+  
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+  
+  .btn:active {
+    transform: translateY(0);
+  }
+  
+  /* Primary button (orange) */
+  .btn-primary {
+    background: var(--color-accent-orange);
+    color: white;
+    box-shadow: var(--shadow-orange);
+  }
+  
+  .btn-primary:hover {
+    background: #E03D00;
+    box-shadow: var(--shadow-orange-hover);
+  }
+  
+  /* Secondary button (gray) */
+  .btn-secondary {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+  }
+  
+  .btn-secondary:hover {
+    background: var(--color-bg-hover);
+    border-color: var(--color-text-secondary);
+  }
+  
+  /* Danger button (red) */
+  .btn-danger {
+    background: var(--color-error);
+    color: white;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+  }
+  
+  .btn-danger:hover {
+    background: #c82333;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+  }
+  
+  /* Icon button (small, square) */
+  .btn-icon {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: all var(--transition-fast);
+  }
+  
+  .btn-icon:hover {
+    background: var(--color-bg-hover);
+    transform: scale(1.05);
+  }
+  
+  /* Large button */
+  .btn-lg {
+    padding: 16px 32px;
+    font-size: var(--font-size-lg);
+  }
+  
+  /* Small button */
+  .btn-sm {
+    padding: 8px 16px;
+    font-size: var(--font-size-sm);
+  }
+  
+  /* Full width button */
+  .btn-block {
+    width: 100%;
+  }
+  
+  
+  /* ============================================
+     INPUTS
+     ============================================ */
+  
+  /* Base input styles */
+  .input,
+  .select,
+  .textarea {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: var(--font-size-base);
+    font-family: var(--font-family);
+    color: var(--color-text-primary);
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-normal);
+  }
+  
+  .input:hover,
+  .select:hover,
+  .textarea:hover {
+    border-color: var(--color-accent-blue);
+  }
+  
+  .input:focus,
+  .select:focus,
+  .textarea:focus {
+    outline: none;
+    border-color: var(--color-accent-blue);
+    box-shadow: 0 0 0 3px rgba(0, 121, 211, 0.1);
+  }
+  
+  .input::placeholder,
+  .textarea::placeholder {
+    color: var(--color-text-muted);
+  }
+  
+  /* Search input (with icon) */
+  .input-search {
+    padding-left: 48px;
+    font-size: var(--font-size-lg);
+  }
+  
+  /* Small input */
+  .input-sm {
+    padding: 8px 12px;
+    font-size: var(--font-size-sm);
+  }
+  
+  /* Date input */
+  input[type="date"].input {
+    cursor: pointer;
+  }
+  
+  /* Select dropdown */
+  .select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%237C7C7C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+  
+  /* Textarea */
+  .textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  /* Checkbox */
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--color-accent-orange);
+  }
+  
+  
+  /* ============================================
+     CARDS
+     ============================================ */
+  
+  /* Base card */
+  .card {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    transition: all var(--transition-normal);
+  }
+  
+  .card:hover {
+    box-shadow: var(--shadow-md);
+  }
+  
+  /* Clickable card */
+  .card-clickable {
+    cursor: pointer;
+  }
+  
+  .card-clickable:hover {
+    border-color: var(--color-accent-blue);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  
+  /* Save card (specific styling) */
+  .save-card {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .save-card:hover {
+    border-color: var(--color-accent-blue);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  
+  .save-card:last-child {
+    margin-bottom: 0;
+  }
+  
+  .save-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    line-height: var(--line-height-normal);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .save-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+  
+  
+  /* ============================================
+     TAGS & BADGES
+     ============================================ */
+  
+  /* Tag dot (colored circle) */
+  .tag-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  
+  /* Small tag dot (for save cards) */
+  .tag-dot-sm {
+    width: 12px;
+    height: 12px;
+  }
+  
+  /* Tag colors */
+  .tag-dot-red { background: var(--tag-red); }
+  .tag-dot-orange { background: var(--tag-red); }
+  .tag-dot-blue { background: var(--tag-blue); }
+  .tag-dot-green { background: var(--tag-green); }
+  .tag-dot-pink { background: var(--tag-pink); }
+  .tag-dot-yellow { background: var(--tag-yellow); }
+  .tag-dot-purple { background: var(--tag-purple); }
+  
+  /* Badge (small label) */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .badge-primary {
+    background: var(--color-accent-orange);
+    color: white;
+  }
+  
+  .badge-secondary {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-secondary);
+  }
+  
+  .badge-success {
+    background: var(--color-success);
+    color: white;
+  }
+  
+  .badge-danger {
+    background: var(--color-error);
+    color: white;
+  }
+  
+  
+  /* ============================================
+     SECTION HEADERS
+     ============================================ */
+  
+  .section-title {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  
+  /* ============================================
+     EMPTY STATE
+     ============================================ */
+  
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--color-text-secondary);
+  }
+  
+  .empty-state-icon {
+    font-size: 48px;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .empty-state-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .empty-state-description {
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-secondary);
+    max-width: 400px;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .empty-state-note {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--spacing-lg);
+    max-width: 350px;
+  }
+  
+  
+  /* ============================================
+     LOADING STATES
+     ============================================ */
+  
+  .spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-accent-orange);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  .spinner-lg {
+    width: 40px;
+    height: 40px;
+    border-width: 4px;
+  }
+  
+  
+  /* ============================================
+     DIVIDERS
+     ============================================ */
+  
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--color-border);
+    margin: var(--spacing-lg) 0;
+  }
+  
+  .divider-vertical {
+    width: 1px;
+    height: 24px;
+    background: var(--color-border);
+  }
+  
+  
+  /* ============================================
+     ICONS
+     ============================================ */
+  
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  
+  .icon-sm {
+    font-size: 16px;
+  }
+  
+  .icon-lg {
+    font-size: 24px;
+  }
+  
+  .icon-xl {
+    font-size: 32px;
+  }

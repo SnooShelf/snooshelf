@@ -1,0 +1,160 @@
+/**
+ * SnooShelf - variables.css
+ * Design system - all design tokens (colors, spacing, typography, radius)
+ */
+
+ :root {
+    /* ============================================
+       COLOR PALETTE
+       ============================================ */
+    
+    /* Primary Text Colors */
+    --color-text-primary: #1A1A1B;      /* Almost black - main text */
+    --color-text-secondary: #7C7C7C;    /* Gray - secondary text */
+    --color-text-muted: #B8B8B8;        /* Light gray - hints/placeholders */
+    
+    /* Background Colors */
+    --color-bg-primary: #FFFFFF;        /* Pure white - main background */
+    --color-bg-secondary: #F8F9FA;      /* Off-white - sidebar */
+    --color-bg-hover: #F5F5F5;          /* Subtle hover state */
+    
+    /* Border Colors */
+    --color-border: #EDEDED;            /* Light gray - dividers */
+    
+    /* Accent Colors */
+    --color-accent-orange: #FF4500;     /* Reddit orange - primary CTA */
+    --color-accent-blue: #0079D3;       /* Reddit blue - links */
+    --color-accent-green: #46D160;      /* Green - success/checkmarks */
+    
+    /* Tag Colors (for Week 3) */
+    --tag-red: #FF4500;
+    --tag-blue: #0079D3;
+    --tag-green: #46D160;
+    --tag-pink: #FF66AC;
+    --tag-yellow: #FFB000;
+    --tag-purple: #7193FF;
+    
+    /* Status Colors */
+    --color-success: #46D160;
+    --color-error: #DC3545;
+    --color-warning: #FFB000;
+    --color-info: #0079D3;
+    
+    
+    /* ============================================
+       TYPOGRAPHY
+       ============================================ */
+    
+    /* Font Family */
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 
+                   'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 
+                   'Helvetica Neue', sans-serif;
+    
+    /* Font Sizes */
+    --font-size-xs: 11px;               /* Small labels, hints */
+    --font-size-sm: 13px;               /* Secondary text */
+    --font-size-base: 15px;             /* Body text */
+    --font-size-lg: 18px;               /* Card titles */
+    --font-size-xl: 24px;               /* Page headers */
+    --font-size-2xl: 32px;              /* Main branding */
+    --font-size-3xl: 40px;              /* Onboarding hero */
+    
+    /* Font Weights */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* Line Heights */
+    --line-height-tight: 1.3;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.6;
+    
+    
+    /* ============================================
+       SPACING SYSTEM
+       ============================================ */
+    
+    /* Consistent spacing scale - use these everywhere! */
+    --spacing-xs: 8px;
+    --spacing-sm: 12px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+    
+    
+    /* ============================================
+       BORDER RADIUS
+       ============================================ */
+    
+    --radius-sm: 6px;                   /* Small elements */
+    --radius-md: 8px;                   /* Buttons, inputs */
+    --radius-lg: 12px;                  /* Cards */
+    
+    
+    /* ============================================
+       SHADOWS
+       ============================================ */
+    
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --shadow-orange: 0 2px 8px rgba(255, 69, 0, 0.3);
+    --shadow-orange-hover: 0 4px 12px rgba(255, 69, 0, 0.4);
+    
+    
+    /* ============================================
+       TRANSITIONS
+       ============================================ */
+    
+    --transition-fast: 150ms ease;
+    --transition-normal: 200ms ease;
+    --transition-slow: 300ms ease;
+    
+    
+    /* ============================================
+       Z-INDEX SCALE
+       ============================================ */
+    
+    --z-dropdown: 1000;
+    --z-modal: 2000;
+    --z-tooltip: 3000;
+    --z-toast: 4000;
+    
+    
+    /* ============================================
+       LAYOUT DIMENSIONS
+       ============================================ */
+    
+    /* Main Popup Dimensions */
+    --popup-width: 900px;
+    --popup-height: 700px;
+    --sidebar-width: 280px;
+    
+    /* Onboarding Dimensions */
+    --onboarding-width: 500px;
+    --onboarding-height: 600px;
+    
+    /* Settings Dimensions */
+    --settings-width: 700px;
+    --settings-height: 600px;
+  }
+  
+  /* ============================================
+     DARK MODE SUPPORT (Optional)
+     ============================================ */
+  
+  @media (prefers-color-scheme: dark) {
+    :root {
+      /* Override colors for dark mode if desired */
+      /* Uncomment and adjust when implementing dark mode */
+      
+      /* --color-bg-primary: #1A1A1B;
+      --color-bg-secondary: #272729;
+      --color-text-primary: #D7DADC;
+      --color-text-secondary: #818384;
+      --color-border: #343536;
+      --color-bg-hover: #3A3A3C; */
+    }
+  }
