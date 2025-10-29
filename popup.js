@@ -4,13 +4,13 @@
 window.showLoggedOutState = function() {
     console.log('[NEW] showLoggedOutState called');
     try {
-        const usernameDisplay = document.getElementById('username-display');
-        if (usernameDisplay) {
-            usernameDisplay.textContent = 'Not logged in';
+        const usernameEl = document.getElementById('username-display');
+        if (usernameEl) {
+            usernameEl.textContent = 'Not logged in';
         }
-        const emptyState = document.getElementById('empty-state');
-        if (emptyState) {
-            emptyState.style.display = 'flex';
+        const emptyStateEl = document.getElementById('empty-state');
+        if (emptyStateEl) {
+            emptyStateEl.style.display = 'flex';
         }
     } catch (e) {
         console.error('Error in showLoggedOutState:', e);
@@ -20,18 +20,22 @@ window.showLoggedOutState = function() {
 window.showLoggedInState = function(username) {
     console.log('[NEW] showLoggedInState called for:', username);
     try {
-        const usernameDisplay = document.getElementById('username-display');
-        if (usernameDisplay) {
-            usernameDisplay.textContent = username || 'Guest';
+        const usernameEl = document.getElementById('username-display');
+        if (usernameEl) {
+            usernameEl.textContent = username || 'Guest';
         }
-        const emptyState = document.getElementById('empty-state');
-        if (emptyState) {
-            emptyState.style.display = 'none';
+        const emptyStateEl = document.getElementById('empty-state');
+        if (emptyStateEl) {
+            emptyStateEl.style.display = 'none';
         }
     } catch (e) {
         console.error('Error in showLoggedInState:', e);
     }
 };
+
+// Make them globally available
+var showLoggedOutState = window.showLoggedOutState;
+var showLoggedInState = window.showLoggedInState;
 
 // Make them globally available
 var showLoggedOutState = window.showLoggedOutState;
@@ -44,9 +48,18 @@ window.setupEventListeners = function() {
     // Sync button
     const syncBtn = document.getElementById('sync-btn');
     if (syncBtn) {
-        syncBtn.addEventListener('click', () => {
-            console.log('Sync button clicked');
-            // Your sync logic here
+        syncBtn.addEventListener('click', async () => {
+            console.log('Sync clicked');
+            
+            // Show search and filters
+            const searchSection = document.getElementById('search-section');
+            const filtersBar = document.getElementById('filters-bar');
+            
+            if (searchSection) searchSection.style.display = 'block';
+            if (filtersBar) filtersBar.style.display = 'flex';
+            
+            // TODO: Actual sync logic will go here
+            alert('Sync functionality coming soon!');
         });
     }
     
@@ -289,37 +302,113 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Hide loading state
         showLoading(false);
+        const modalSettingsBtn = document.getElementById('settings-btn');
+        const modalSettingsOverlay = document.getElementById('settings-modal');
+        const modalCloseBtn = document.getElementById('close-settings');
         
+        if (modalSettingsBtn && modalSettingsOverlay) {
+            modalSettingsBtn.addEventListener('click', () => {
+                modalSettingsOverlay.style.display = 'flex';
+                
+                // Load settings data
+                chrome.storage.local.get(['reddit_username', 'saves', 'last_sync_time'], (result) => {
+                    const settingsUsername = document.getElementById('settings-username');
+                    if (settingsUsername && result.reddit_username) {
+                        settingsUsername.textContent = result.reddit_username;
+                    }
+                    
+                    const totalSaves = document.getElementById('total-saves-count');
+                    if (totalSaves && result.saves) {
+                        totalSaves.textContent = result.saves.length || 0;
+                    }
+                    
+                    const lastSync = document.getElementById('last-sync-time');
+                    if (lastSync && result.last_sync_time) {
+                        lastSync.textContent = new Date(result.last_sync_time).toLocaleString();
+                    }
+                });
+            });
+        }
+        
+        if (modalCloseBtn && modalSettingsOverlay) {
+            modalCloseBtn.addEventListener('click', () => {
+                modalSettingsOverlay.style.display = 'none';
+            });
+        }
+        
+        // Close modal when clicking outside
+        if (modalSettingsOverlay) {
+            modalSettingsOverlay.addEventListener('click', (e) => {
+                if (e.target === modalSettingsOverlay) {
+                    modalSettingsOverlay.style.display = 'none';
+                }
+            });
+        }
         
     } catch (error) {
         console.error('Error initializing popup:', error);
         showError('Failed to initialize popup');
         showLoading(false);
     }
-    // Hide loading state
-    showLoading(false);
-        
-    // Add basic event listeners manually
-    const syncBtn = document.getElementById('sync-btn');
-    if (syncBtn) {
-        syncBtn.addEventListener('click', async () => {
-            console.log('Sync clicked');
-            alert('Sync functionality coming soon!');
-        });
-    }
+    });
+            // Hide loading state
+            showLoading(false);
+            
+            // Add basic event listeners manually
+            const syncBtn = document.getElementById('sync-btn');
+            if (syncBtn) {
+                syncBtn.addEventListener('click', async () => {
+                    console.log('Sync clicked');
+                    alert('Sync functionality coming soon!');
+                });
+            }
+            
+            // Settings modal
+            const modalSettingsBtn = document.getElementById('settings-btn');
+            const modalSettingsOverlay = document.getElementById('settings-modal');
+            const modalCloseBtn = document.getElementById('close-settings');
+            
+            if (modalSettingsBtn && modalSettingsOverlay) {
+                modalSettingsBtn.addEventListener('click', () => {
+                    modalSettingsOverlay.style.display = 'flex';
+                    
+                    chrome.storage.local.get(['reddit_username', 'saves', 'last_sync_time'], (result) => {
+                        const settingsUsername = document.getElementById('settings-username');
+                        if (settingsUsername && result.reddit_username) {
+                            settingsUsername.textContent = result.reddit_username;
+                        }
+                        
+                        const totalSaves = document.getElementById('total-saves-count');
+                        if (totalSaves && result.saves) {
+                            totalSaves.textContent = result.saves.length || 0;
+                        }
+                        
+                        const lastSync = document.getElementById('last-sync-time');
+                        if (lastSync && result.last_sync_time) {
+                            lastSync.textContent = new Date(result.last_sync_time).toLocaleString();
+                        }
+                    });
+                });
+            }
+            
+            if (modalCloseBtn && modalSettingsOverlay) {
+                modalCloseBtn.addEventListener('click', () => {
+                    modalSettingsOverlay.style.display = 'none';
+                });
+            }
+            
+            if (modalSettingsOverlay) {
+                modalSettingsOverlay.addEventListener('click', (e) => {
+                    if (e.target === modalSettingsOverlay) {
+                        modalSettingsOverlay.style.display = 'none';
+                    }
+                });
+            }
     
-    const settingsBtn = document.getElementById('settings-btn');
-    if (settingsBtn) {
-        settingsBtn.addEventListener('click', () => {
-            chrome.runtime.openOptionsPage();
-        });
-    }
-    
+        // ====================================================================
+        // CACHE INTEGRATION
+        // ====================================================================
 
-
-// ============================================================================
-// CACHE INTEGRATION
-// ============================================================================
 
 /**
  * Get cached stats or calculate and cache them
@@ -2127,4 +2216,4 @@ function sendMessageToBackground(message) {
     });
 }
 
-console.log('SnooShelf popup script loaded successfully'); })
+console.info('SnooShelf popup script loaded successfully');

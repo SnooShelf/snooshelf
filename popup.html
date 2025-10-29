@@ -45,7 +45,7 @@
             </div>
             
             <!-- Search Section -->
-            <div class="search-section">
+            <div class="search-section" id="search-section" style="display: none;">
                 <div class="search-container">
                     <span class="search-icon">🔍</span>
                     <input 
@@ -58,7 +58,7 @@
             </div>
             
             <!-- Filters Bar -->
-            <div class="filters-bar" id="filters-bar">
+            <div class="filters-bar" id="filters-bar" style="display: none;">
                 <div class="filter-group">
                     <span class="filter-label">Date:</span>
                     <select id="date-filter" class="filter-select">
@@ -115,5 +115,72 @@
     
     <!-- Keep your existing JavaScript -->
     <script src="popup.js"></script>
+  <!-- Settings Modal Overlay -->
+  <div id="settings-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content settings-modal">
+        <!-- Header -->
+        <div class="modal-header">
+            <button class="modal-close-btn" id="close-settings">
+                <span>←</span>
+            </button>
+            <h2 class="modal-title">Settings</h2>
+            <div></div> <!-- Spacer for flexbox -->
+        </div>
+        
+        <!-- Settings Body -->
+        <div class="modal-body">
+            <!-- Account Section -->
+            <div class="settings-section">
+                <h3 class="section-title">ACCOUNT</h3>
+                <div class="account-info">
+                    <div class="account-avatar">M</div>
+                    <div class="account-details">
+                        <div class="account-username" id="settings-username">Loading...</div>
+                        <div class="account-status">Connected</div>
+                    </div>
+                </div>
+                <button class="btn btn-danger btn-block" id="disconnect-btn">
+                    Disconnect Account
+                </button>
+            </div>
+            
+            <!-- Data Section -->
+            <div class="settings-section">
+                <h3 class="section-title">DATA</h3>
+                <div class="storage-info">
+                    <div class="storage-stat">
+                        <span class="storage-stat-label">Total Saves</span>
+                        <span class="storage-stat-value" id="total-saves-count">0</span>
+                    </div>
+                    <div class="storage-stat">
+                        <span class="storage-stat-label">Last Synced</span>
+                        <span class="storage-stat-value" id="last-sync-time">Never</span>
+                    </div>
+                </div>
+                <button class="btn btn-secondary btn-block" id="export-data-btn">
+                    Export Data (JSON)
+                </button>
+                <button class="btn btn-secondary btn-block" id="clear-cache-btn">
+                    Clear Cache
+                </button>
+            </div>
+            
+            <!-- About Section -->
+            <div class="settings-section">
+                <h3 class="section-title">ABOUT</h3>
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Version</div>
+                    </div>
+                    <div class="version-info">1.0.0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Keep your existing script tag -->
+<script src="popup.js"></script>
+</body>  
 </body>
 </html>
