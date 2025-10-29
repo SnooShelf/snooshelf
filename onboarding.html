@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to SnooShelf</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/onboarding.css">
+</head>
+<body>
+    <div class="onboarding-container">
+        <!-- Branding -->
+        <h1 class="brand-large">SnooShelf</h1>
+        <p class="tagline">Search & Organize Your Reddit Saves</p>
+        
+        <!-- Welcome Message -->
+        <h2 class="welcome-heading">Welcome! 👋</h2>
+        
+        <!-- Features List -->
+        <ul class="features-list">
+            <li class="feature-item">
+                <span class="feature-icon">🔍</span>
+                <span class="feature-text">Instant search for all your saves</span>
+            </li>
+            <li class="feature-item">
+                <span class="feature-icon">🗂️</span>
+                <span class="feature-text">Organize with tags and folders</span>
+            </li>
+            <li class="feature-item">
+                <span class="feature-icon">🔒</span>
+                <span class="feature-text">100% private & stored locally</span>
+            </li>
+            <li class="feature-item">
+                <span class="feature-icon">📈</span>
+                <span class="feature-text">Unlimited saves storage</span>
+            </li>
+        </ul>
+        
+        <!-- Connect Button -->
+        <button id="connect-btn" class="connect-button">
+            <span class="reddit-icon">🤖</span>
+            <span>Connect with Reddit</span>
+        </button>
+        
+        <!-- Security Note -->
+        <p class="security-note">
+            <span class="lock-icon">🔒</span>
+            <span>We never store your Reddit password. All data stays on your device.</span>
+        </p>
+        
+        <!-- Loading State (hidden by default) -->
+        <div id="loading-state" class="loading-state" style="display: none;">
+            <div class="spinner spinner-lg"></div>
+            <p class="loading-text">Connecting to Reddit...</p>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="onboarding.js"></script>
+</body>
+</html>

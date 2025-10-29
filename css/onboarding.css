@@ -1,242 +1,160 @@
 /**
  * SnooShelf - onboarding.css
- * Onboarding/login page specific styles
+ * Onboarding page matching mockup design
  */
 
-/* ============================================
-   ONBOARDING PAGE DIMENSIONS
-   ============================================ */
+/* Page Setup */
+body {
+  width: 500px;
+  height: 650px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #FFFFFF;
+  margin: 0;
+  padding: 0;
+}
 
-   body {
-    width: var(--onboarding-width);
-    height: var(--onboarding-height);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-  
-  
-  /* ============================================
-     ONBOARDING CONTAINER
-     ============================================ */
-  
-  .onboarding-container {
-    max-width: 400px;
-    padding: var(--spacing-xl);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  
-  /* ============================================
-     BRANDING
-     ============================================ */
-  
-  .brand-large {
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-primary);
-    margin-bottom: var(--spacing-md);
-    letter-spacing: -1px;
-  }
-  
-  
-  /* ============================================
-     HEADLINES
-     ============================================ */
-  
-  .onboarding-headline {
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-primary);
-    line-height: var(--line-height-tight);
-    margin-bottom: var(--spacing-lg);
-  }
-  
-  .onboarding-subheadline {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-primary);
-    margin-bottom: var(--spacing-xl);
-  }
-  
-  
-  /* ============================================
-     DESCRIPTION
-     ============================================ */
-  
-  .onboarding-description {
-    font-size: var(--font-size-base);
-    color: var(--color-text-secondary);
-    line-height: var(--line-height-relaxed);
-    margin-bottom: var(--spacing-xl);
-  }
-  
-  
-  /* ============================================
-     FEATURES LIST
-     ============================================ */
-  
-  .features-list {
-    list-style: none;
-    text-align: left;
-    margin-bottom: var(--spacing-xl);
-    width: 100%;
-    max-width: 350px;
-  }
-  
-  .feature-item {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) 0;
-    font-size: var(--font-size-base);
-    color: var(--color-text-primary);
-  }
-  
-  .feature-icon {
-    font-size: 24px;
-    flex-shrink: 0;
-  }
-  
-  
-  /* ============================================
-     CTA BUTTON
-     ============================================ */
-  
-  .cta-button {
-    background: var(--color-accent-orange);
-    color: white;
-    border: none;
-    padding: var(--spacing-md) var(--spacing-xl);
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-semibold);
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    width: 100%;
-    max-width: 350px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-xs);
-    box-shadow: var(--shadow-orange);
-    transition: all var(--transition-normal);
-  }
-  
-  .cta-button:hover {
-    background: #E03D00;
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-orange-hover);
-  }
-  
-  .cta-button:active {
-    transform: translateY(0);
-  }
-  
-  
-  /* ============================================
-     FOOTER NOTE
-     ============================================ */
-  
-  .onboarding-note,
-  .footer-note {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
-    line-height: var(--line-height-relaxed);
-    margin-top: var(--spacing-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-xs);
-    max-width: 350px;
-  }
-  
-  
-  /* ============================================
-     WELCOME SECTION (if used)
-     ============================================ */
-  
-  .welcome-heading {
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-primary);
-    margin: var(--spacing-xl) 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-sm);
-  }
-  
-  .welcome-emoji {
-    font-size: var(--font-size-2xl);
-  }
-  
-  
-  /* ============================================
-     LOADING STATE (during OAuth)
-     ============================================ */
-  
-  .onboarding-loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-lg);
-  }
-  
-  .onboarding-loading .spinner {
-    width: 40px;
-    height: 40px;
-    border-width: 4px;
-  }
-  
-  .loading-text {
-    font-size: var(--font-size-base);
-    color: var(--color-text-secondary);
-  }
-  
-  
-  /* ============================================
-     ERROR STATE (if OAuth fails)
-     ============================================ */
-  
-  .onboarding-error {
-    padding: var(--spacing-md);
-    background: rgba(220, 53, 69, 0.1);
-    border: 1px solid var(--color-error);
-    border-radius: var(--radius-md);
-    color: var(--color-error);
-    font-size: var(--font-size-sm);
-    margin-top: var(--spacing-lg);
-  }
-  
-  
-  /* ============================================
-     RESPONSIVE
-     ============================================ */
-  
-  @media (max-height: 550px) {
-    .onboarding-container {
-      padding: var(--spacing-md);
-    }
-    
-    .brand-large {
-      font-size: var(--font-size-2xl);
-      margin-bottom: var(--spacing-sm);
-    }
-    
-    .onboarding-headline {
-      font-size: var(--font-size-xl);
-      margin-bottom: var(--spacing-md);
-    }
-    
-    .features-list {
-      margin-bottom: var(--spacing-lg);
-    }
-    
-    .feature-item {
-      padding: 6px 0;
-    }
-  }
+/* Main Container */
+.onboarding-container {
+  max-width: 440px;
+  width: 100%;
+  padding: 40px 32px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Branding */
+.brand-large {
+  font-size: 52px;
+  font-weight: 700;
+  color: #1A1A1B;
+  margin: 0 0 8px 0;
+  letter-spacing: -1.5px;
+  line-height: 1;
+}
+
+.tagline {
+  font-size: 17px;
+  color: #7C7C7C;
+  margin: 0 0 48px 0;
+  font-weight: 400;
+}
+
+/* Welcome Heading */
+.welcome-heading {
+  font-size: 26px;
+  font-weight: 600;
+  color: #1A1A1B;
+  margin: 0 0 32px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Features List */
+.features-list {
+  list-style: none;
+  width: 100%;
+  margin: 0 0 40px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-align: left;
+  padding: 0;
+}
+
+.feature-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-text {
+  font-size: 17px;
+  color: #1A1A1B;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+/* Connect Button */
+.connect-button {
+  width: 100%;
+  max-width: 400px;
+  padding: 16px 32px;
+  background: #FF4500;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(255, 69, 0, 0.25);
+  transition: all 0.2s ease;
+  margin: 0 0 24px 0;
+}
+
+.connect-button:hover {
+  background: #E03D00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 69, 0, 0.35);
+}
+
+.connect-button:active {
+  transform: translateY(0);
+}
+
+.reddit-icon {
+  font-size: 24px;
+}
+
+/* Security Note */
+.security-note {
+  font-size: 14px;
+  color: #B8B8B8;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 8px;
+  max-width: 380px;
+  margin: 0;
+}
+
+.lock-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.loading-text {
+  font-size: 16px;
+  color: #7C7C7C;
+}
