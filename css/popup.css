@@ -2,7 +2,15 @@
  * SnooShelf - popup.css
  * Main popup specific styles (two-column layout, sidebar, main content)
  */
+/* ============================================
+   PREVENT ALL SCROLLING
+   ============================================ */
 
+   html, body {
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 /* ============================================
    POPUP DIMENSIONS
    ============================================ */
@@ -30,16 +38,16 @@
      SIDEBAR (Left Column)
      ============================================ */
   
-  .sidebar {
-    width: var(--sidebar-width);
-    height: 100%;
-    background: var(--color-bg-secondary);
-    border-right: 1px solid var(--color-border);
-    padding: var(--spacing-lg) var(--spacing-md);
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-  }
+     .sidebar {
+      width: var(--sidebar-width);
+      height: 100%;
+      background: var(--color-bg-secondary);
+      border-right: 1px solid var(--color-border);
+      padding: var(--spacing-md) var(--spacing-sm);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
   
   /* Branding */
   .brand {
@@ -49,12 +57,12 @@
     margin-bottom: var(--spacing-xs);
   }
   
-  /* Username display */
-  .username {
-    font-size: var(--font-size-base);
-    color: var(--color-text-secondary);
-    margin-bottom: var(--spacing-xl);
-  }
+/* Username display */
+.username {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-md);
+}
   
   /* Section titles (TAGS, FOLDERS) */
   .sidebar .section-title {
@@ -157,10 +165,10 @@
      SEARCH SECTION
      ============================================ */
   
-  .search-section {
-    padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
-    border-bottom: 1px solid var(--color-border);
-  }
+     .search-section {
+      padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm) var(--spacing-md);
+      border-bottom: 1px solid var(--color-border);
+    }
   
   .search-container {
     position: relative;
@@ -170,20 +178,20 @@
   
   .search-icon {
     position: absolute;
-    left: 20px;
+    left: 16px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 20px;
+    font-size: 18px;
     color: var(--color-text-secondary);
     pointer-events: none;
   }
   
   .search-input {
     width: 100%;
-    padding: var(--spacing-md) var(--spacing-lg) var(--spacing-md) 56px;
+    padding: 12px var(--spacing-md) 12px 48px;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
     font-family: var(--font-family);
     color: var(--color-text-primary);
     transition: all var(--transition-normal);
@@ -209,14 +217,15 @@
      FILTERS BAR
      ============================================ */
   
-  .filters-bar {
-    padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    border-bottom: 1px solid var(--color-border);
-    flex-wrap: wrap;
-  }
+     .filters-bar {
+      padding: var(--spacing-sm) var(--spacing-md);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      border-bottom: 1px solid var(--color-border);
+      flex-wrap: wrap;
+      min-height: 48px;
+    }
   
   .filter-group {
     display: flex;
@@ -346,16 +355,28 @@
      SAVES CONTAINER
      ============================================ */
   
-  .saves-container {
-    flex: 1;
-    overflow-y: auto;
-    padding: var(--spacing-lg);
-  }
-  
-  /* When saves container has the empty state */
-  .saves-container .empty-state {
-    height: 100%;
-  }
+     .saves-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* When saves container has the empty state */
+    .saves-container .empty-state {
+      height: 100%;
+      padding: var(--spacing-md);
+    }
+
+.empty-state-description {
+  margin-bottom: var(--spacing-md);
+}
+
+.empty-state-note {
+  margin-top: var(--spacing-md);
+  font-size: var(--font-size-xs);
+}
   
   
   /* ============================================

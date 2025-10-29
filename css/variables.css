@@ -128,9 +128,9 @@
        ============================================ */
     
     /* Main Popup Dimensions */
-    --popup-width: 900px;
-    --popup-height: 700px;
-    --sidebar-width: 280px;
+    --popup-width: 800px;
+    --popup-height: 600px;
+    --sidebar-width: 240px;
     
     /* Onboarding Dimensions */
     --onboarding-width: 500px;

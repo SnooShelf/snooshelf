@@ -89,8 +89,8 @@
   
   /* Large button */
   .btn-lg {
-    padding: 16px 32px;
-    font-size: var(--font-size-lg);
+    padding: 12px 24px;
+    font-size: var(--font-size-base);
   }
   
   /* Small button */
@@ -326,45 +326,47 @@
   
   
   /* ============================================
-     EMPTY STATE
-     ============================================ */
-  
-  .empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: var(--spacing-2xl);
-    color: var(--color-text-secondary);
-  }
-  
-  .empty-state-icon {
-    font-size: 48px;
-    margin-bottom: var(--spacing-lg);
-  }
-  
-  .empty-state-title {
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-primary);
-    margin-bottom: var(--spacing-md);
-  }
-  
-  .empty-state-description {
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-relaxed);
-    color: var(--color-text-secondary);
-    max-width: 400px;
-    margin-bottom: var(--spacing-lg);
-  }
-  
-  .empty-state-note {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
-    margin-top: var(--spacing-lg);
-    max-width: 350px;
-  }
+   EMPTY STATE
+   ============================================ */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-md);
+  color: var(--color-text-secondary);
+  height: 100%;
+}
+
+.empty-state-icon {
+  font-size: 40px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.empty-state-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.empty-state-description {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-secondary);
+  max-width: 380px;
+  margin-bottom: var(--spacing-md);
+}
+
+.empty-state-note {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-sm);
+  max-width: 320px;
+  line-height: 1.4;
+}
   
   
   /* ============================================

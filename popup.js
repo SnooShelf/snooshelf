@@ -1,11 +1,146 @@
-/**
- * SnooShelf Popup Script
- * Handles the full extension popup UI with saves list, search, and sync functionality
- */
+// CRITICAL: Override old UI functions with new safe versions
+// These MUST come before any other code
 
-// ============================================================================
+window.showLoggedOutState = function() {
+    console.log('[NEW] showLoggedOutState called');
+    try {
+        const usernameDisplay = document.getElementById('username-display');
+        if (usernameDisplay) {
+            usernameDisplay.textContent = 'Not logged in';
+        }
+        const emptyState = document.getElementById('empty-state');
+        if (emptyState) {
+            emptyState.style.display = 'flex';
+        }
+    } catch (e) {
+        console.error('Error in showLoggedOutState:', e);
+    }
+};
+
+window.showLoggedInState = function(username) {
+    console.log('[NEW] showLoggedInState called for:', username);
+    try {
+        const usernameDisplay = document.getElementById('username-display');
+        if (usernameDisplay) {
+            usernameDisplay.textContent = username || 'Guest';
+        }
+        const emptyState = document.getElementById('empty-state');
+        if (emptyState) {
+            emptyState.style.display = 'none';
+        }
+    } catch (e) {
+        console.error('Error in showLoggedInState:', e);
+    }
+};
+
+// Make them globally available
+var showLoggedOutState = window.showLoggedOutState;
+var showLoggedInState = window.showLoggedInState;
+
+// Safe event listener setup
+window.setupEventListeners = function() {
+    console.log('[NEW] Setting up event listeners');
+    
+    // Sync button
+    const syncBtn = document.getElementById('sync-btn');
+    if (syncBtn) {
+        syncBtn.addEventListener('click', () => {
+            console.log('Sync button clicked');
+            // Your sync logic here
+        });
+    }
+    
+    // Settings button
+    const settingsBtn = document.getElementById('settings-btn');
+    if (settingsBtn) {
+        settingsBtn.addEventListener('click', () => {
+            console.log('Settings button clicked');
+            chrome.runtime.openOptionsPage();
+        });
+    }
+    
+    // Search input
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            console.log('Search:', e.target.value);
+            // Your search logic here
+        });
+    }
+    
+    console.log('[NEW] Event listeners setup complete');
+};
+
+var setupEventListeners = window.setupEventListeners;
+
+// Compatibility Functions for New UI
+// ============================================
+
+/**
+ * Show/hide loading state
+ */
+function showLoading(show, message = 'Loading...') {
+    const usernameDisplay = document.getElementById('username-display');
+    if (usernameDisplay) {
+        usernameDisplay.textContent = show ? message : 'Guest';
+    }
+}
+
+/**
+ * Show error message
+ */
+function showError(message) {
+    console.error('Error:', message);
+    const emptyState = document.getElementById('empty-state');
+    if (emptyState) {
+        emptyState.innerHTML = `
+            <div class="empty-state-icon">⚠️</div>
+            <h3 class="empty-state-title">Error</h3>
+            <p class="empty-state-description">${message}</p>
+            <button id="retry-btn" class="btn btn-primary">
+                <span>🔄</span>
+                <span>Retry</span>
+            </button>
+        `;
+        
+        // Add retry functionality
+        const retryBtn = document.getElementById('retry-btn');
+        if (retryBtn) {
+            retryBtn.addEventListener('click', () => {
+                location.reload();
+            });
+        }
+    }
+}
+
+/**
+ * Toast notification compatibility (simple console version)
+ */
+window.Toast = {
+    show: (message, type = 'info') => {
+        console.log(`[${type.toUpperCase()}] ${message}`);
+        // Could add a simple notification div here later
+    },
+    success: (message) => {
+        console.log(`[SUCCESS] ${message}`);
+    },
+    error: (message) => {
+        console.error(`[ERROR] ${message}`);
+    },
+    info: (message) => {
+        console.log(`[INFO] ${message}`);
+    }
+};
+
+
+// Your existing code starts below
+// SnooShelf Popup Script
+// Handles the full extension popup UI with saves list, search, and sync functionality
+ 
+
+
 // DOM ELEMENTS
-// ============================================================================
+
 
 const elements = {
     // State containers
@@ -141,16 +276,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         
     // Setup event listeners
-    setupEventListeners();
+    // setupEventListeners(); // TEMPORARILY DISABLED
     
     // Load subreddit filter options and saved selection
     if (currentState.isAuthenticated) {
-        await populateSubredditFilter();
-        await loadSavedFilter();
+       // await populateSubredditFilter(); // TEMPORARILY DISABLED
+       // await loadSavedFilter(); // TEMPORARILY DISABLED
     }
         
         // Initialize performance optimizations
-        initializePerformanceOptimizations();
+        // initializePerformanceOptimizations(); // TEMPORARILY DISABLED
         
         // Hide loading state
         showLoading(false);
@@ -161,7 +296,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         showError('Failed to initialize popup');
         showLoading(false);
     }
-});
+    // Hide loading state
+    showLoading(false);
+        
+    // Add basic event listeners manually
+    const syncBtn = document.getElementById('sync-btn');
+    if (syncBtn) {
+        syncBtn.addEventListener('click', async () => {
+            console.log('Sync clicked');
+            alert('Sync functionality coming soon!');
+        });
+    }
+    
+    const settingsBtn = document.getElementById('settings-btn');
+    if (settingsBtn) {
+        settingsBtn.addEventListener('click', () => {
+            chrome.runtime.openOptionsPage();
+        });
+    }
+    
+
 
 // ============================================================================
 // CACHE INTEGRATION
@@ -379,11 +533,6 @@ async function showLoggedInState() {
 /**
  * Show logged out UI state
  */
-function showLoggedOutState() {
-    elements.header.classList.add('hidden');
-    elements.loggedInState.classList.add('hidden');
-    elements.loggedOutState.classList.remove('hidden');
-}
 
 /**
  * Handle login button click
@@ -1265,26 +1414,17 @@ function addStaggeredAnimation(container) {
 /**
  * Show or hide loading state
  */
-function showLoading(show, text = 'Loading...') {
-    elements.loadingText.textContent = text;
-    elements.loading.style.display = show ? 'block' : 'none';
-}
+
 
 /**
  * Show loading overlay
  */
-function showLoadingOverlay(show, text = 'Loading...') {
-    elements.loadingOverlayText.textContent = text;
-    elements.loadingOverlay.classList.toggle('hidden', !show);
-}
+
 
 /**
  * Show error message
  */
-function showError(message) {
-    console.error('Error:', message);
-    Toast.showError(message);
-}
+
 
 /**
  * Show success message
@@ -1987,4 +2127,4 @@ function sendMessageToBackground(message) {
     });
 }
 
-console.log('SnooShelf popup script loaded successfully');
+console.log('SnooShelf popup script loaded successfully'); })
